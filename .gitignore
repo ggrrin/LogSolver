@@ -1,0 +1,10 @@
+bin/
+obj/
+cd/
+.vs/
+.git/
+.hg/
+.hgignore
+**/*.sdf
+**/*.suo
+*.stackdump
