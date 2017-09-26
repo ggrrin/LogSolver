@@ -91,6 +91,7 @@
     <Compile Include="Actions\UnLoadAction.cs" />
     <Compile Include="HelperDummyObjects\Van.cs" />
     <Compile Include="Searchers\DepthFirstSearch.cs" />
+    <Compile Include="Searchers\Heap.cs" />
     <Compile Include="Searchers\IterativeDeepeningSearch.cs" />
   </ItemGroup>
   <ItemGroup>

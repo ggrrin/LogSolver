@@ -51,6 +51,13 @@ namespace LogSolver
 
         static void Main(string[] args)
         {
+            var h = new Heap<int>(new []{5,3,21,1,4,35,432,2,32,12});
+            h.Add(31);
+            h.Add(310);
+            h.Add(131);
+            h.Add(1531);
+            h.Sort();
+
             //simple inputs
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
