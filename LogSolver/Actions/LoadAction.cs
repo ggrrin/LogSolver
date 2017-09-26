@@ -19,5 +19,8 @@ namespace LogSolver.Actions
         {
             return parentState.CloneChangingLoadPackage(package, van);
         }
+
+
+        public override string ToString() => $"{Name} {package} to {van}";
     }
 }

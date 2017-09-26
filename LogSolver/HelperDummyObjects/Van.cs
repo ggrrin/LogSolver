@@ -17,7 +17,7 @@ namespace LogSolver.HelperDummyObjects
             this.state = state;
         }
 
-        public Place Place => new Place(state.PlacesCitiesIdentifiers[(int)Identifier], state);
+        public Place Place => new Place(state.VansPlaceIdentifiers[(int)Identifier], state);
         public bool IsFull => Packages.Count >= 4;
 
         public bool Equals(Van other) => Identifier == other.Identifier;
@@ -33,5 +33,7 @@ namespace LogSolver.HelperDummyObjects
         public static bool operator ==(Van v1, Van v2) => v1.Equals(v2);
 
         public static bool operator !=(Van v1, Van v2) => !(v1 == v2);
+
+        public override string ToString() => $"{nameof(Van)} {Identifier} at {Place}";
     }
 }

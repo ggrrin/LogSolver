@@ -14,7 +14,7 @@ namespace LogSolver.Actions
 
         public override State PerformAction(State parentState)
         {
-            return InputParser.Parse("TODO");
+            return InputParser.Parse();
         }
     }
 }

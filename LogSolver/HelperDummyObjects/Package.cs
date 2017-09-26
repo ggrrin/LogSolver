@@ -7,6 +7,7 @@ namespace LogSolver.HelperDummyObjects
     {
         private readonly State state;
         public uint Identifier { get; }
+        public bool IsDefault => state == null;
 
         public PackageLocationEnum LocationType => state.PackagesLocationTypes[(int) Identifier];
 
@@ -21,7 +22,7 @@ namespace LogSolver.HelperDummyObjects
             this.Identifier = identifier;
         }
 
-        public bool Equals(Package other) => Identifier == other.Identifier;
+        public bool Equals(Package other) => Identifier == other.Identifier; 
 
         public override bool Equals(object obj)
         {
@@ -34,5 +35,6 @@ namespace LogSolver.HelperDummyObjects
         public static bool operator ==(Package p1, Package p2) => p1.Equals(p2);
 
         public static bool operator !=(Package p1, Package p2) => !(p1 == p2);
+        public override string ToString() => $"{nameof(Package)} {Identifier} at {Location}";
     }
 }

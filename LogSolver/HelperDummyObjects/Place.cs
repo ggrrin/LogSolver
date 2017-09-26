@@ -59,12 +59,14 @@ namespace LogSolver.HelperDummyObjects
             return obj is Place && Equals((Place)obj);
         }
 
-        public bool Equals(Place other) => Identifier == other.Identifier;
+        public bool Equals(Place other) => Identifier == other.Identifier; 
 
         public override int GetHashCode() => (int)Identifier;
 
         public static bool operator ==(Place p1, Place p2) => p1.Equals(p2);
 
         public static bool operator !=(Place p1, Place p2) => !(p1 == p2);
+        public override string ToString() => $"{nameof(Place)} {Identifier}|{City.Identifier}";
+
     }
 }

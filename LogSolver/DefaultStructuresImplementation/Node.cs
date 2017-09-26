@@ -1,10 +1,11 @@
 using System.Linq;
+using System.Text;
 using LogSolver.HelperDummyObjects;
 using LogSolver.ProblemAbstration;
 
 namespace LogSolver.DefaultStructuresImplementation
 {
-    public class Node<TState> : INode<TState> where TState : IState
+    public class Node<TState> : INode<TState> where TState : class,IState
     {
 
         public TState State { get; set; }
@@ -17,16 +18,29 @@ namespace LogSolver.DefaultStructuresImplementation
         public Node(Node<TState> parent, IAction<TState> action)
         {
             Parent = parent;
-            State = action.PerformAction(parent.State);
             Action = action;
-            PathPrice = parent.PathPrice + action.ActionCost; 
-            Depth = parent.Depth + 1;
+            PathPrice = (parent?.PathPrice ?? 0) + action.ActionCost;
+            Depth = (uint) (((int?)(parent?.Depth) ?? -1) + 1);
+            State = action.PerformAction(parent?.State);
+        }
+
+
+        public string Dump()
+        {
+            var sb = new StringBuilder();
+            var node = this;
+            while (node != null)
+            {
+                sb.AppendLine(node.Action.ToString());
+                node = node.Parent;
+            }
+            return sb.ToString();
         }
 
         public bool IsGoalState()
         {
             var res = State.Packages.FirstOrDefault(p => !p.IsInDestination);
-            return res == default(Package);
+            return res.IsDefault;
         }
 
     }

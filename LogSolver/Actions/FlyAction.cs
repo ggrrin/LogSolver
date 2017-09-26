@@ -19,5 +19,7 @@ namespace LogSolver.Actions
         {
             return parentState.CloneChangingPlaneLocation(plane, city);
         }
+
+        public override string ToString() => $"{Name} {plane} to {city} with [{string.Join(" ,", plane.Packages)}]";
     }
 }

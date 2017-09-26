@@ -45,5 +45,7 @@ namespace LogSolver.HelperDummyObjects
         public static bool operator ==(City c1, City c2) => c1.Equals(c2);
 
         public static bool operator !=(City c1, City c2) => !(c1 == c2);
+
+        public override string ToString() => $"{nameof(City)} {Identifier}";
     }
 }

@@ -19,5 +19,7 @@ namespace LogSolver.Actions
         {
             return parentState.CloneChangingVanLocation(van, newPlace);
         }
+
+        public override string ToString() => $"{Name} {van} to {newPlace} with [{string.Join(" ,", van.Packages)}]";
     }
 }

@@ -19,5 +19,6 @@ namespace LogSolver.Actions
         {
             return parentState.CloneChangingPickUpPackage(package, plane);
         }
+        public override string ToString() => $"{Name} {package} to {plane}";
     }
 }

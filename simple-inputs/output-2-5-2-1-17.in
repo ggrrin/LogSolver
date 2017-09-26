@@ -1,0 +1,42 @@
+% number of cities:
+2
+% number of sites:
+5
+% cities in which respective sites are located:
+1
+1
+0
+1
+0
+% airports:
+4
+1
+% number of trucks:
+2
+% locations of trucks:
+0
+4
+% number of planes:
+1
+% locations of planes:
+1
+% number of packages:
+17
+% locations and destinations of packages:
+1 2
+3 3
+0 0
+4 0
+1 0
+2 0
+0 1
+1 0
+2 2
+3 2
+4 3
+2 3
+1 4
+0 0
+3 2
+1 1
+3 4

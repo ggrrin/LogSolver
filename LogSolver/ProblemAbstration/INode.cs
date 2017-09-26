@@ -2,7 +2,7 @@
 
 namespace LogSolver.ProblemAbstration
 {
-    public interface INode<TState> where TState : IState
+    public interface INode<TState> where TState : class,IState
     {
         IAction<TState> Action { get; }
         uint Depth { get; }
