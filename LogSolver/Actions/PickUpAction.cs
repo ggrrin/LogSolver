@@ -1,4 +1,8 @@
-namespace LogSolver
+using LogSolver.DefaultStructuresImplementation;
+using LogSolver.HelperDummyObjects;
+using LogSolver.ProblemAbstration;
+
+namespace LogSolver.Actions
 {
     public class PickUpAction :ActionBase
     {

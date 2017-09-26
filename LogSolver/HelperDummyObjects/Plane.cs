@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using LogSolver.DefaultStructuresImplementation;
 
-namespace LogSolver
+namespace LogSolver.HelperDummyObjects
 {
     public struct Plane : IEquatable<Plane>
     {

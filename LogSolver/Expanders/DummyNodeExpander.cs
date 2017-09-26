@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
+using LogSolver.Actions;
+using LogSolver.DefaultStructuresImplementation;
+using LogSolver.HelperDummyObjects;
+using LogSolver.ProblemAbstration;
 
-namespace LogSolver
+namespace LogSolver.Expanders
 {
     public class DummyNodeExpander : INodeExpander<State, Node<State>>
     {

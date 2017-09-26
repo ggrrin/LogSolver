@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LogSolver
+namespace LogSolver.ProblemAbstration
 {
     public interface ISearchAlgorithm<TState, TNode> where TState : IState where TNode : INode<TState>
     {

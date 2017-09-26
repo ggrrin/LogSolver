@@ -1,4 +1,4 @@
-namespace LogSolver
+namespace LogSolver.HelperDummyObjects
 {
     public enum PackageLocationEnum
     {

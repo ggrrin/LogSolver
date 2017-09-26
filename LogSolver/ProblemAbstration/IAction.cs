@@ -1,4 +1,4 @@
-namespace LogSolver
+namespace LogSolver.ProblemAbstration
 {
     public interface IAction<TState> where TState : IState
     {

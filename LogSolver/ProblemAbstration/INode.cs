@@ -1,4 +1,6 @@
-﻿namespace LogSolver
+﻿using LogSolver.DefaultStructuresImplementation;
+
+namespace LogSolver.ProblemAbstration
 {
     public interface INode<TState> where TState : IState
     {

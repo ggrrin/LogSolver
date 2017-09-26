@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
+using LogSolver.DefaultStructuresImplementation;
+using LogSolver.ProblemAbstration;
 
-namespace LogSolver
+namespace LogSolver.Searchers
 {
     public class BreathFirstSearch : ISearchAlgorithm<State,Node<State>>
     {

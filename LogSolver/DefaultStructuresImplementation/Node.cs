@@ -1,6 +1,8 @@
 using System.Linq;
+using LogSolver.HelperDummyObjects;
+using LogSolver.ProblemAbstration;
 
-namespace LogSolver
+namespace LogSolver.DefaultStructuresImplementation
 {
     public class Node<TState> : INode<TState> where TState : IState
     {

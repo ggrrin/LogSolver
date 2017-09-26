@@ -1,4 +1,7 @@
-namespace LogSolver
+using LogSolver.DefaultStructuresImplementation;
+using LogSolver.ProblemAbstration;
+
+namespace LogSolver.Actions
 {
     public class InitAction : ActionBase 
     {

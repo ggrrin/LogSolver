@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LogSolver.HelperDummyObjects;
 
-namespace LogSolver
+namespace LogSolver.DefaultStructuresImplementation
 {
     public class Parser
     {

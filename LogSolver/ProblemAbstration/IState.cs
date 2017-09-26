@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using LogSolver.HelperDummyObjects;
 
-namespace LogSolver
+namespace LogSolver.ProblemAbstration
 {
     public interface IState
     {
