@@ -2,12 +2,24 @@ using System.Linq;
 
 namespace LogSolver
 {
-    public class Node
+    public class Node<TState> : INode<TState> where TState : IState
     {
-        public State State { get; set; }
-        public Action Action { get; set; }
-        public int PathPrice { get; set; }
-        public uint Depth { get; set; }
+
+        public TState State { get; set; }
+        public IAction<TState> Action { get; }
+        public int PathPrice { get; }
+        public uint Depth { get; }
+
+        public Node<TState> Parent { get; }
+
+        public Node(Node<TState> parent, IAction<TState> action)
+        {
+            Parent = parent;
+            State = action.PerformAction(parent.State);
+            Action = action;
+            PathPrice = parent.PathPrice + action.ActionCost; 
+            Depth = parent.Depth + 1;
+        }
 
         public bool IsGoalState()
         {

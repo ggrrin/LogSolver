@@ -1,6 +1,9 @@
 namespace LogSolver
 {
-    public interface IAction
+    public interface IAction<TState> where TState : IState
     {
+        string Name { get; }
+        int ActionCost { get; }
+        TState PerformAction(TState parentState);
     }
 }

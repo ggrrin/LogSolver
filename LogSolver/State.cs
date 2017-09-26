@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LogSolver
 {
-    public class State
+    public class State : IState
     {
         private readonly uint[] placesCitiesIdentifiers;
         private readonly uint[] airportsIdentifiers;
