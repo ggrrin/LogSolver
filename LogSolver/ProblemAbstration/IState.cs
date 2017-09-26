@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using LogSolver.HelperDummyObjects;
 
 namespace LogSolver.ProblemAbstration
 {
-    public interface IState
+    public interface IState : IEquatable<IState>
     {
         IReadOnlyList<uint> AirportsIdentifiers { get; }
         IEnumerable<City> Cities { get; }

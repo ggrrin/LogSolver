@@ -6,19 +6,28 @@ using LogSolver.ProblemAbstration;
 
 namespace LogSolver.Searchers
 {
+    public enum SearchMode
+    { TreeSearch, GraphSearch }
+
     public class BreathFirstSearch : ISearchAlgorithm<State, Node<State>>
     {
         public uint ExpandedNodes { get; protected set; }
         public uint MaxDepth { get; protected set; }
         public INodeExpander<State, Node<State>> Expander { get; }
 
-        public BreathFirstSearch(INodeExpander<State, Node<State>> expander)
+        public SearchMode Mode { get; }
+
+        public BreathFirstSearch(INodeExpander<State, Node<State>> expander, SearchMode mode)
         {
             Expander = expander;
+            Mode = mode;
         }
 
         public IEnumerable<Node<State>> Search(Node<State> initialNode)
         {
+            var closedNodes = new HashSet<State>();
+
+
             var fringesQueue = new Queue<IEnumerable<Node<State>>>();
             fringesQueue.Enqueue(new[] { initialNode });
 
@@ -27,6 +36,14 @@ namespace LogSolver.Searchers
                 var currentFringe = fringesQueue.Dequeue();
                 foreach (var currentNode in currentFringe)
                 {
+                    if (Mode == SearchMode.GraphSearch)
+                    {
+                        if (closedNodes.Contains(currentNode.State))
+                            continue;
+                        else
+                            closedNodes.Add(currentNode.State);
+                    }
+
                     MaxDepth = Math.Max(MaxDepth, currentNode.Depth);
                     if (currentNode.IsGoalState())
                         yield return currentNode;

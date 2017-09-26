@@ -24,7 +24,6 @@ namespace LogSolver.DefaultStructuresImplementation
             State = action.PerformAction(parent?.State);
         }
 
-
         public string Dump()
         {
             var sb = new StringBuilder();
@@ -39,8 +38,7 @@ namespace LogSolver.DefaultStructuresImplementation
 
         public bool IsGoalState()
         {
-            var res = State.Packages.FirstOrDefault(p => !p.IsInDestination);
-            return res.IsDefault;
+            return State.Packages.All(p => p.IsInDestination);
         }
 
     }

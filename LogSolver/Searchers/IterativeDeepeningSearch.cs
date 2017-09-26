@@ -11,14 +11,16 @@ namespace LogSolver.Searchers
         protected uint overallMaxDepth;
         protected DepthFirstSearch dfs;
 
+        public SearchMode Mode { get; }
         public uint ExpandedNodes => overallExpandedNodes + dfs?.ExpandedNodes ?? 0;
         public uint MaxDepth => Math.Max(overallMaxDepth, dfs?.ExpandedNodes ?? 0);
         public int DepthLimit { get; }
         public INodeExpander<State, Node<State>> Expander { get; }
 
-        public IterativeDeepeningSearch(int depthLimit, INodeExpander<State, Node<State>> expander)
+        public IterativeDeepeningSearch(int depthLimit, INodeExpander<State, Node<State>> expander, SearchMode mode)
         {
             Expander = expander;
+            Mode = mode;
             DepthLimit = depthLimit;
         }
 
@@ -26,7 +28,7 @@ namespace LogSolver.Searchers
         {
             for (int i = 0; i < DepthLimit; i++)
             {
-                dfs = new DepthFirstSearch(i, Expander);
+                dfs = new DepthFirstSearch(i, Expander, Mode);
                 foreach (var resultNode in dfs.Search(initialNode))
                 {
                     yield return resultNode;

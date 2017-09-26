@@ -7,7 +7,6 @@ namespace LogSolver.HelperDummyObjects
     {
         private readonly State state;
         public uint Identifier { get; }
-        public bool IsDefault => state == null;
 
         public PackageLocationEnum LocationType => state.PackagesLocationTypes[(int) Identifier];
 
