@@ -1,7 +1,8 @@
 using System.Linq;
-using System.Runtime.ExceptionServices;
+using LogSolver.Architecture;
+using LogSolver.Structures;
 
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Estimators
 {
     public class SimpleRemainerPriceEstimator : IRemainerPriceEstimator<State>
     {

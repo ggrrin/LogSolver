@@ -1,6 +1,7 @@
 using System;
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.Helpers;
+using LogSolver.Structures;
 
 namespace LogSolver.Searchers
 {

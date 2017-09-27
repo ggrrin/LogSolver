@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace LogSolver.Searchers
+namespace LogSolver.Helpers
 {
     public class Heap<TNode> : ICollection<TNode> where TNode : IComparable<TNode>
     {

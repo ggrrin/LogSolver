@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LogSolver.Actions;
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.HelperDummyObjects;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.Helpers;
+using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {

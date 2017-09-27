@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LogSolver.DefaultStructuresImplementation;
+using LogSolver.Structures;
 
-namespace LogSolver.HelperDummyObjects
+namespace LogSolver.DummyObjects
 {
     public struct City : IEquatable<City>
     {

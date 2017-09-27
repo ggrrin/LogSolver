@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.Helpers;
 
 namespace LogSolver.Searchers
 {

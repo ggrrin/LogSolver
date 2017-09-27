@@ -1,8 +1,11 @@
 using System.Linq;
 using LogSolver.Actions;
-using LogSolver.HelperDummyObjects;
+using LogSolver.Architecture;
+using LogSolver.DummyObjects;
+using LogSolver.Helpers;
+using LogSolver.Structures;
 
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Estimators
 {
     public class PathRemaninerPriceEstimator : IRemainerPriceEstimator<State>
     {

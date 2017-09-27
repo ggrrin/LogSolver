@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using LogSolver.HelperDummyObjects;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.DummyObjects;
+using LogSolver.Helpers;
 
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Structures
 {
     public class State : IState
     {

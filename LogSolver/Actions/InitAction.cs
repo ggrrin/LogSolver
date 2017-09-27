@@ -1,5 +1,5 @@
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.ProblemAbstration;
+using LogSolver.IO;
+using LogSolver.Structures;
 
 namespace LogSolver.Actions
 {

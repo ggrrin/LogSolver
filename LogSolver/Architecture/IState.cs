@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using LogSolver.HelperDummyObjects;
+using LogSolver.DummyObjects;
+using LogSolver.Helpers;
 
-namespace LogSolver.ProblemAbstration
+namespace LogSolver.Architecture
 {
     public interface IState : IEquatable<IState>
     {

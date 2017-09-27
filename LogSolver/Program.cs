@@ -3,17 +3,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using LogSolver.Actions;
-using LogSolver.DefaultStructuresImplementation;
+using LogSolver.Estimators;
 using LogSolver.Expanders;
-using LogSolver.ProblemAbstration;
+using LogSolver.Helpers;
+using LogSolver.IO;
+using LogSolver.NodeFactories;
 using LogSolver.Searchers;
+using LogSolver.Structures;
 
 namespace LogSolver
 {
     class Program
     {
-
-
         static void Main(string[] args)
         {
             /////////////////
@@ -151,7 +152,7 @@ namespace LogSolver
             }
         }
 
-        static void TestInputs(FileInfo inputsFile, Test test, SearchMode mode = SearchMode.TreeSearch)
+        static void TestInputs(FileInfo inputsFile, TestFunc test, SearchMode mode = SearchMode.TreeSearch)
         {
             var inputs = File.ReadAllLines(inputsFile.FullName);
             foreach (var inputFileName in inputs)

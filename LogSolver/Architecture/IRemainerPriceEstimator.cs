@@ -1,6 +1,4 @@
-using LogSolver.ProblemAbstration;
-
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Architecture
 {
     public interface IRemainerPriceEstimator<in TState> where TState : class, IState
     {

@@ -1,7 +1,8 @@
 using System;
-using LogSolver.DefaultStructuresImplementation;
+using LogSolver.Helpers;
+using LogSolver.Structures;
 
-namespace LogSolver.HelperDummyObjects
+namespace LogSolver.DummyObjects
 {
     public struct Package : IEquatable<Package>
     {

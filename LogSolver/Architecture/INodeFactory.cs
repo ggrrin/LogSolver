@@ -1,6 +1,4 @@
-using LogSolver.DefaultStructuresImplementation;
-
-namespace LogSolver.ProblemAbstration
+namespace LogSolver.Architecture
 {
     public interface INodeFactory<TState, TNode> where TState : class,IState where TNode : INode<TState>
     {

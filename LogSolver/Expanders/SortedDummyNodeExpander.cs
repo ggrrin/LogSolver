@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {

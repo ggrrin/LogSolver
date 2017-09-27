@@ -1,7 +1,7 @@
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
+using LogSolver.Structures;
 
-namespace LogSolver.Expanders
+namespace LogSolver.NodeFactories
 {
     public class DefaultNodeFactory : INodeFactory<State, Node<State>>
     {

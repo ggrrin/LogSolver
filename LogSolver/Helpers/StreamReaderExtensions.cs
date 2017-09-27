@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Helpers
 {
     public static class StreamReaderExtensions
     {

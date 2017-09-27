@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using LogSolver.DefaultStructuresImplementation;
+using LogSolver.Structures;
 
-namespace LogSolver.HelperDummyObjects
+namespace LogSolver.DummyObjects
 {
     public struct Place : IEquatable<Place>
     {

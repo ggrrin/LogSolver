@@ -1,9 +1,8 @@
 using System;
-using System.CodeDom;
 using System.Linq;
-using LogSolver.ProblemAbstration;
+using LogSolver.Architecture;
 
-namespace LogSolver.DefaultStructuresImplementation
+namespace LogSolver.Structures
 {
     public class AStarNode<TState> : Node<TState>, IComparable<AStarNode<TState>>, IEquatable<AStarNode<TState>> 
         where TState : class, IState

@@ -1,6 +1,7 @@
-using LogSolver.DefaultStructuresImplementation;
+using LogSolver.Architecture;
+using LogSolver.Structures;
 
-namespace LogSolver.ProblemAbstration
+namespace LogSolver.Actions
 {
     public abstract class ActionBase :IAction<State>
     {

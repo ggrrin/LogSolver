@@ -1,6 +1,5 @@
-using LogSolver.DefaultStructuresImplementation;
-using LogSolver.HelperDummyObjects;
-using LogSolver.ProblemAbstration;
+using LogSolver.DummyObjects;
+using LogSolver.Structures;
 
 namespace LogSolver.Actions
 {

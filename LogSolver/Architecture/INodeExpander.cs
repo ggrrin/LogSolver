@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace LogSolver.ProblemAbstration
+namespace LogSolver.Architecture
 {
     public interface INodeExpander<TState, TNode> where TState : class,IState where TNode : INode<TState>
     {
