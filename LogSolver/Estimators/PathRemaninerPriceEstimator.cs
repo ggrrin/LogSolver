@@ -13,7 +13,7 @@ namespace LogSolver.Estimators
         {
             int freePlaneStorageCount = 1;// + state.Planes.Min(p => p.FreeStorageCount);
             int freeVanStorageCount = 1;// +state.Vans.Min(v => v.FreeStorageCount);
-            
+
             int other = 0;
             int totalFlyCost = 0;
             int totalDriveCost = 0;
@@ -56,7 +56,7 @@ namespace LogSolver.Estimators
                     other += new UnLoadAction(default(Package)).ActionCost;
                 }
             }
-            return other + totalFlyCost / freePlaneStorageCount + totalDriveCost /freeVanStorageCount;
+            return other + totalFlyCost / freePlaneStorageCount + totalDriveCost / freeVanStorageCount;
         }
     }
 }

@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LogSolver.Architecture;
+using LogSolver.NodeFactories;
 using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {
-    public class SortedDummyNodeExpander<TNode> : DummyNodeExpander<TNode> where TNode : AStarNode<State>
+    public class SortedDummyNodeExpander<TNode> : DummyNodeExpander<TNode> where TNode : IGoalEstimateNode<State>
     {
         public bool DescendingOrder { get; }
         public SortedDummyNodeExpander(INodeFactory<State, TNode> nodeFactory, bool descendingOrder) : base(nodeFactory)

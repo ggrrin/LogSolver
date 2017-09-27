@@ -1,6 +1,8 @@
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LogSolver.Helpers
 {
@@ -73,6 +75,12 @@ namespace LogSolver.Helpers
             FixHeap(0);
             return res;
         }
+
+        public TNode PeekMin()
+        {
+            return buffer.Any() ? buffer[0] : throw new InvalidOperationException("Heap is empty.");
+        }
+
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

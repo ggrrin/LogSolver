@@ -152,6 +152,39 @@ namespace LogSolver
             }
         }
 
+        static void RBFS(string input, SearchMode mode)
+        {
+            var nodeFactory = new RBFSNodeFactory(new PathRemaninerPriceEstimator());//new SimpleRemainerPriceEstimator());
+            var expander = new DummyNodeExpander<RBFSNode<State>>(nodeFactory);
+            var searcher = new RecursiveBestFirstSearch<RBFSNode<State>>(expander); 
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            foreach (var res in results)
+            {
+
+                Console.WriteLine($"==Solution==");
+                Console.WriteLine($"Result:\r\n{res.Dump()}");
+
+                Console.WriteLine($"==Solution stats==");
+                Console.WriteLine($"Depth: {res.Depth}");
+                Console.WriteLine($"Price: {res.PathPrice}");
+                Console.WriteLine($"PriceEstimate: {res.GoalPriceEstimate}");
+
+                Console.WriteLine($"==Searcher stats==");
+                Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+                Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+                break;
+                if (Console.ReadKey(false).Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine($"Aborting search...");
+                    break;
+                }
+                Console.WriteLine($"Searching next solution: =>>>>>>>>>>>>>>>>>>>>>>");
+            }
+        }
+
+
         static void TestInputs(FileInfo inputsFile, TestFunc test, SearchMode mode = SearchMode.TreeSearch)
         {
             var inputs = File.ReadAllLines(inputsFile.FullName);
