@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using LogSolver.Architecture;
 
 namespace LogSolver.Structures
@@ -13,5 +14,7 @@ namespace LogSolver.Structures
         }
 
         public int CompareTo(RBFSNode<TState> other) => GoalPriceEstimate.CompareTo(other.GoalPriceEstimate);
+
+        public override string ToString(int fullPathPrice) => $"{PathPrice}/{fullPathPrice}({GoalPriceEstimate})|| {string.Join(" ", State.Packages.Select(p => $"[{p.Location.Identifier}|{p.Destination.Identifier}]"))} {Action}";
     }
 }

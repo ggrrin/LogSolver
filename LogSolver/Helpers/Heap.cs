@@ -3,12 +3,15 @@ using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LogSolver.Structures;
 
 namespace LogSolver.Helpers
 {
     public class Heap<TNode> : ICollection<TNode> where TNode : IComparable<TNode>
     {
         protected readonly List<TNode> buffer;
+        public int Count => buffer.Count;
+        public bool IsReadOnly => false;
 
         public Heap()
         {
@@ -50,9 +53,9 @@ namespace LogSolver.Helpers
                 FixHeap(i);
         }
 
-        public void Add(TNode i)
+        public void Add(TNode item)
         {
-            buffer.Add(i);
+            buffer.Add(item);
             int currentIndex = buffer.Count - 1;
             int parentIndex = (currentIndex - 1) / 2;
 
@@ -81,6 +84,25 @@ namespace LogSolver.Helpers
             return buffer.Any() ? buffer[0] : throw new InvalidOperationException("Heap is empty.");
         }
 
+        public void UpdateKey(TNode item)
+        {
+            var index = buffer.IndexOf(item);
+            if (index == -1)
+                throw new InvalidOperationException("Key is not present in collection.");
+            FixHeap(index);
+        }
+
+        public bool Remove(TNode item)
+        {
+            int index = buffer.IndexOf(item);
+            if (index == -1)
+                return false;
+
+            buffer[index] = buffer[buffer.Count - 1];
+            buffer.RemoveAt(buffer.Count);
+            FixHeap(index);
+            return true;
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -95,11 +117,8 @@ namespace LogSolver.Helpers
             buffer.CopyTo(array, arrayIndex);
         }
 
-        public int Count => buffer.Count;
-        public bool IsReadOnly => false;
-        public bool Remove(TNode item)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
     }
 }

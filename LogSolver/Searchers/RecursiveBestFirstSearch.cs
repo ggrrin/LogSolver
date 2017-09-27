@@ -8,6 +8,13 @@ using LogSolver.Structures;
 
 namespace LogSolver.Searchers
 {
+    class X<TNode> where TNode : RBFSNode<State>
+    {
+        public TNode Node;
+        public Heap<TNode> Successors;
+        public int F_limit;
+    }
+
     public class RecursiveBestFirstSearch<TNode> : ISearchAlgorithm<State, TNode> where TNode : RBFSNode<State>
     {
         public uint ExpandedNodesStat { get; protected set; }
@@ -22,11 +29,64 @@ namespace LogSolver.Searchers
 
         public IEnumerable<TNode> Search(TNode initialNode)
         {
-            var (result, _) = RBFS(initialNode, Int32.MaxValue);
-            if (result != null)
-                yield return result;
-            else
-                yield break;
+            var stack = new Stack<X<TNode>>();
+            stack.Push(new X<TNode>
+            {
+                Node = initialNode,
+                F_limit = int.MaxValue
+            });
+
+            while (stack.Any())
+            {
+                var currentLayer = stack.Peek();
+
+                if (currentLayer.Node.IsGoalState())
+                {
+                    yield return currentLayer.Node;
+                    yield break;
+                }
+                else
+                {
+                    //expand only if atanding for the first time
+                    currentLayer.Successors = currentLayer.Successors ?? new Heap<TNode>(Expander.ExpandNode(currentLayer.Node));
+
+                    if (!currentLayer.Successors.Any())
+                    {
+                        //Layer is empty mark parent node with worst value and throw out frame
+                        PopCurrentLayerAndUpdateParentNodeEstimateAndPriorityQueue(int.MaxValue);
+                    }
+                    else
+                    {
+                        var bestSuccessor = currentLayer.Successors.PeekMin();
+                        if (bestSuccessor.GoalPriceEstimate > currentLayer.F_limit)
+                        {
+                            //Mark layer with best estimate from his successors
+                            PopCurrentLayerAndUpdateParentNodeEstimateAndPriorityQueue(bestSuccessor.GoalPriceEstimate);
+                        }
+                        else
+                        {
+                            var alternative = currentLayer.Successors.Any() ? currentLayer.Successors.PeekMin().GoalPriceEstimate : currentLayer.F_limit;
+
+                            stack.Push(new X<TNode>
+                            {
+                                Node = bestSuccessor,
+                                F_limit = Math.Min(currentLayer.F_limit, alternative),
+                            });
+                        }
+                    }
+
+                    void PopCurrentLayerAndUpdateParentNodeEstimateAndPriorityQueue(int value)
+                    {
+                        currentLayer.Node.GoalPriceEstimate = value;
+                        stack.Pop();
+                        if (stack.Any())
+                        {
+                            var parentLayer = stack.Peek();
+                            parentLayer.Successors.UpdateKey(currentLayer.Node);
+                        }
+                    }
+                }
+            }
         }
 
         (TNode, int?) RBFS(TNode currentNode, int f_limit)
@@ -51,7 +111,7 @@ namespace LogSolver.Searchers
                         if (bestSuccessor.GoalPriceEstimate > f_limit)
                             return (null, bestSuccessor.GoalPriceEstimate);
 
-                        var alternative = successors.PeekMin().GoalPriceEstimate;
+                        var alternative = successors.Any() ? successors.PeekMin().GoalPriceEstimate : f_limit;
 
                         var (result, best) = RBFS(bestSuccessor, Math.Min(f_limit, alternative));
 

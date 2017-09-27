@@ -51,8 +51,11 @@ namespace LogSolver.Estimators
                 }
                 else //move just in city
                 {
-                    other += new LoadAction(default(Package), default(Van)).ActionCost;
+                    if(package.LocationType != PackageLocationEnum.Van)
+                        other += new LoadAction(default(Package), default(Van)).ActionCost;
+
                     totalDriveCost += new DriveAction(default(Van), default(Place)).ActionCost;
+
                     other += new UnLoadAction(default(Package)).ActionCost;
                 }
             }

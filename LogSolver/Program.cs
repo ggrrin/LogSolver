@@ -33,7 +33,8 @@ namespace LogSolver
 
             //Informed astar tree search
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
-            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);//winner
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);//winner
+            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), RBFS);
 
 
             //////////
