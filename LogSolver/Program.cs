@@ -16,36 +16,6 @@ namespace LogSolver
 
         static void Main(string[] args)
         {
-            //Random r = new Random();
-            //var h = new Heap<int>();
-            //const int num = 1000;
-            //for (int i = 0; i < num; i++)
-            //{
-            //    var x = r.Next(10000);
-            //    h.Add(x);
-            //    Console.Write($"{x} ");
-            //}
-
-            //Console.WriteLine();
-
-
-            //var prev = -1;
-            //for (int i = 0; i < num; i++)
-            //{
-            //    var x = h.ExtractMin();
-            //    Console.Write($"{x} ");
-
-            //    if (x < prev)
-            //    {
-            //        Console.Write($"Error ");
-            //        break;
-
-            //    }
-            //    prev = x;
-            //}
-            //Console.WriteLine();
-
-
             /////////////////
             //simple inputs//
             /////////////////
@@ -61,9 +31,8 @@ namespace LogSolver
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS, SearchMode.GraphSearch);
 
             //Informed astar tree search
-            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
+            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);//winner
 
 
             //////////
@@ -117,7 +86,7 @@ namespace LogSolver
 
         static void ABFS(string input, SearchMode mode)
         {
-            
+
             var nodeFactory = new AStarNodeFactory(new PathRemaninerPriceEstimator());//new SimpleRemainerPriceEstimator());
             var expander = new DummyNodeExpander<AStarNode<State>>(nodeFactory);
             var searcher = new AStarBreathFirstSearch(expander, mode);
@@ -137,6 +106,7 @@ namespace LogSolver
                 Console.WriteLine($"==Searcher stats==");
                 Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
                 Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+                break;
                 if (Console.ReadKey(false).Key == ConsoleKey.Enter)
                 {
                     Console.WriteLine($"Aborting search...");
@@ -148,8 +118,7 @@ namespace LogSolver
 
         static void AIDS(string input, SearchMode mode)
         {
-            //new PathRemaninerPriceEstimator());//
-            var nodeFactory = new AStarNodeFactory(new SimpleRemainerPriceEstimator());
+            var nodeFactory = new AStarNodeFactory(new PathRemaninerPriceEstimator());//new SimpleRemainerPriceEstimator());
             var expander = new SortedDummyNodeExpander<AStarNode<State>>(nodeFactory, descendingOrder: false);
             var searcher = new AStarIterativeDeepeningSearch(expander, mode);
             var parser = new Parser(input);
@@ -171,6 +140,8 @@ namespace LogSolver
                 Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
                 Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
                 Console.WriteLine($"MaxCostLimit: {searcher.MaxCostLimitStat}");
+                Console.WriteLine($"LastCostOvercameLimit: {searcher.CostOvercameLimitState}");
+                break;
                 if (Console.ReadKey(false).Key == ConsoleKey.Enter)
                 {
                     Console.WriteLine($"Aborting search...");
@@ -195,6 +166,7 @@ namespace LogSolver
                 Console.WriteLine($"Time: {watch.Elapsed}");
             }
         }
+
         static void HashTest()
         {
             var nodeFactory = new DefaultNodeFactory();
@@ -225,6 +197,38 @@ namespace LogSolver
             bool r0 = nmove1Hash == nmove2xHash;
             bool r1 = unload1Hash == unload2Hash;
             bool r2 = unload1.State == unload2.State;
+        }
+
+        static void HeapTest()
+        {
+            Random r = new Random();
+            var h = new Heap<int>();
+            const int num = 1000;
+            for (int i = 0; i < num; i++)
+            {
+                var x = r.Next(10000);
+                h.Add(x);
+                Console.Write($"{x} ");
+            }
+
+            Console.WriteLine();
+
+
+            var prev = -1;
+            for (int i = 0; i < num; i++)
+            {
+                var x = h.ExtractMin();
+                Console.Write($"{x} ");
+
+                if (x < prev)
+                {
+                    Console.Write($"Error ");
+                    break;
+
+                }
+                prev = x;
+            }
+            Console.WriteLine();
         }
     }
 }

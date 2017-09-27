@@ -11,11 +11,12 @@ namespace LogSolver.Searchers
         protected uint overallMaxDepth;
         protected int overallMaxCost;
         protected CostLimitedDepthFirstSearch<State, AStarNode<State>> cldfs;
-
+        protected int currentCostLimit;
         public SearchMode Mode { get; }
         public uint ExpandedNodesStat => overallExpandedNodes + cldfs?.ExpandedNodesStat ?? 0;
         public uint MaxDepthStat => Math.Max(overallMaxDepth, cldfs?.MaxDepthStat ?? 0);
         public int MaxCostLimitStat => Math.Max(overallMaxCost, cldfs?.MaxCost ?? 0);
+        public int CostOvercameLimitState => currentCostLimit;
         public int CostLimit { get; }
         public INodeExpander<State, AStarNode<State>> Expander { get; }
 
@@ -28,15 +29,14 @@ namespace LogSolver.Searchers
 
         public IEnumerable<AStarNode<State>> Search(AStarNode<State> initialNode)
         {
-            var currentCostLimit = initialNode.GoalPriceEstimate;
+            currentCostLimit = initialNode.GoalPriceEstimate;
             while(currentCostLimit >= 0 && currentCostLimit <= CostLimit )
             {
                 cldfs = new CostLimitedDepthFirstSearch<State, AStarNode<State>>(Expander, Mode, currentCostLimit);
                 foreach (var resultNode in cldfs.Search(initialNode))
-                {
                     yield return resultNode;
-                }
-                currentCostLimit = cldfs.MaxCost;
+
+                currentCostLimit = cldfs.MinCostOvercameLimit;
 
                 overallExpandedNodes += cldfs.ExpandedNodesStat;
                 overallMaxDepth = Math.Max(overallMaxDepth, cldfs.MaxDepthStat);
