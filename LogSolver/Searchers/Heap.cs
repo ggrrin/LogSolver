@@ -8,79 +8,71 @@ namespace LogSolver.Searchers
     {
         protected readonly List<TNode> buffer;
 
+        public Heap()
+        {
+            buffer = new List<TNode>();
+        }
+
         public Heap(IEnumerable<TNode> items)
         {
             buffer = new List<TNode>(items);
-            make_heap(0, buffer.Count);
+            MakeHeap();
         }
 
-        protected void fix_heap(int start, int end, int i)
+        protected void FixHeap(int i)
         {
-            int parent = start + i;
-            int left = start + 2 * i;
-            int right = start + 2 * i + 1;
+            int parent = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            int min = parent;
 
-            int max = parent;
+            if (right < buffer.Count && buffer[right].CompareTo(buffer[min]) < 0)
+                min = right;
 
-            if (right < end && buffer[right].CompareTo(buffer[max]) < 0)
-                max = right;
+            if (left < buffer.Count && buffer[left].CompareTo(buffer[min]) < 0)
+                min = left;
 
-
-            if (left < end && buffer[left].CompareTo(buffer[max]) < 0)
-                max = left;
-
-            if (max != parent)
+            if (min != parent)
             {
-                var temp = buffer[max];
-                buffer[max] = buffer[parent];
+                var temp = buffer[min];
+                buffer[min] = buffer[parent];
                 buffer[parent] = temp;
 
-                fix_heap(start, end, max - start);
+                FixHeap(min);
             }
         }
 
-        protected void make_heap(int start, int end)
+        protected void MakeHeap()
         {
-            int size = end - start;
-            for (int i = size - 1; i >= 0; --i)
-                fix_heap(start, end, i);
-        }
-
-        protected TNode extract_min(int start, int end)
-        {
-            var res = buffer[start];
-            buffer[start] = buffer[end - 1];
-            fix_heap(start, end - 1, 0);
-            return res;
-        }
-
-
-        protected void heap_sort(int start, int end)
-        {
-            make_heap(start, end);
-
-            int size = end - start;
-            for (int i = size - 1; i >= 0; --i)
-            {
-                int last = start + i;
-                buffer[last] = extract_min(start, last + 1);
-            }
+            for (int i = buffer.Count - 1; i >= 0; --i)
+                FixHeap(i);
         }
 
         public void Add(TNode i)
         {
             buffer.Add(i);
-            fix_heap(0, buffer.Count, buffer.Count);
+            int currentIndex = buffer.Count - 1;
+            int parentIndex = (currentIndex - 1) / 2;
+
+            while (currentIndex != parentIndex && buffer[currentIndex].CompareTo(buffer[parentIndex]) < 0)
+            {
+                var temp = buffer[parentIndex];
+                buffer[parentIndex] = buffer[currentIndex];
+                buffer[currentIndex] = temp;
+
+                currentIndex = parentIndex;
+                parentIndex = (currentIndex - 1) / 2;
+            }
         }
 
         public TNode ExtractMin()
         {
-            TNode res = extract_min(0, buffer.Count);
+            var res = buffer[0];
+            buffer[0] = buffer[buffer.Count - 1];
             buffer.RemoveAt(buffer.Count - 1);
+            FixHeap(0);
             return res;
         }
-
-        public void Sort() => heap_sort(0, buffer.Count);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

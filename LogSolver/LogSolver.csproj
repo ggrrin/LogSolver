@@ -65,8 +65,13 @@
     <Compile Include="DefaultStructuresImplementation\AStarNode.cs" />
     <Compile Include="DefaultStructuresImplementation\AStarNodeFactory.cs" />
     <Compile Include="DefaultStructuresImplementation\IRemainerPriceEstimator.cs" />
-    <Compile Include="DefaultStructuresImplementation\SimpleRemaninerPriceEstimator.cs" />
+    <Compile Include="DefaultStructuresImplementation\PathRemaninerPriceEstimator.cs" />
+    <Compile Include="DefaultStructuresImplementation\SimpleRemainerPriceEstimator.cs" />
+    <Compile Include="DefaultStructuresImplementation\StreamReaderExtensions.cs" />
+    <Compile Include="Expanders\SortedDummyNodeExpander.cs" />
     <Compile Include="ProblemAbstration\ActionBase.cs" />
+    <Compile Include="Searchers\AStarBreathFirstSearch.cs" />
+    <Compile Include="Searchers\AStarIterativeDeepeningSearch.cs" />
     <Compile Include="Searchers\BreathFirstSearch.cs" />
     <Compile Include="HelperDummyObjects\City.cs" />
     <Compile Include="Expanders\DefaultNodeFactory.cs" />
@@ -94,10 +99,12 @@
     <Compile Include="DefaultStructuresImplementation\State.cs" />
     <Compile Include="Actions\UnLoadAction.cs" />
     <Compile Include="HelperDummyObjects\Van.cs" />
+    <Compile Include="Searchers\CostLimitedDepthFirstSearch.cs" />
     <Compile Include="Searchers\DepthFirstSearch.cs" />
     <Compile Include="Searchers\Heap.cs" />
     <Compile Include="Searchers\IterativeDeepeningSearch.cs" />
     <Compile Include="Searchers\SearchMode.cs" />
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

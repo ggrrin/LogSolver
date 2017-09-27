@@ -1,31 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LogSolver.DefaultStructuresImplementation;
 using LogSolver.ProblemAbstration;
 
 namespace LogSolver.Searchers
 {
-    public class DepthFirstSearch : ISearchAlgorithm<State, Node<State>>
+    public class DepthFirstSearch<TState, TNode> : ISearchAlgorithm<TState, TNode> where TState : class, IState where TNode : INode<TState>
     {
-        public uint ExpandedNodes { get; protected set; }
-        public uint MaxDepth { get; protected set; }
+        public uint ExpandedNodesStat { get; protected set; }
+        public uint MaxDepthStat { get; protected set; }
         public int DepthLimit { get; }
-        public INodeExpander<State, Node<State>> Expander { get; }
-        public SearchMode Mode { get;}
+        public INodeExpander<TState, TNode> Expander { get; }
+        public SearchMode Mode { get; }
 
-        public DepthFirstSearch(int depthLimit, INodeExpander<State, Node<State>> expander, SearchMode mode)
+        public DepthFirstSearch(INodeExpander<TState, TNode> expander, SearchMode mode, int depthLimit = Int32.MaxValue)
         {
             Expander = expander;
             Mode = mode;
             DepthLimit = depthLimit;
         }
 
-        public IEnumerable<Node<State>> Search(Node<State> initialNode)
+        public IEnumerable<TNode> Search(TNode initialNode)
         {
-            var closedNodes = new HashSet<State>();
+            SearchInit();
+            var closedNodes = new HashSet<TState>();
+            var fringeStack = new Stack<TNode>();
 
-            var fringeStack = new Stack<Node<State>>();
             fringeStack.Push(initialNode);
 
             while (fringeStack.Any())
@@ -40,15 +40,15 @@ namespace LogSolver.Searchers
                         closedNodes.Add(currentNode.State);
                 }
 
-                MaxDepth = Math.Max(MaxDepth, currentNode.Depth);
+                UpdateMaxDepth(currentNode);
 
                 if (currentNode.IsGoalState())
                     yield return currentNode;
                 else
                 {
-                    if (currentNode.Depth < DepthLimit)
+                    if (ExpandNodeDepthTest(currentNode))
                     {
-                        ExpandedNodes++;
+                        ExpandedNodesStat++;
                         foreach (var successorNode in Expander.ExpandNode(currentNode))
                             fringeStack.Push(successorNode);
                     }
@@ -56,5 +56,20 @@ namespace LogSolver.Searchers
             }
         }
 
+        protected virtual void SearchInit()
+        {
+            MaxDepthStat = 0;
+            ExpandedNodesStat = 0;
+        }
+
+        protected virtual void UpdateMaxDepth(TNode currentNode)
+        {
+            MaxDepthStat = Math.Max(MaxDepthStat, currentNode.Depth);
+        }
+
+        protected virtual bool ExpandNodeDepthTest(TNode currentNode)
+        {
+            return currentNode.Depth <= DepthLimit;
+        }
     }
 }

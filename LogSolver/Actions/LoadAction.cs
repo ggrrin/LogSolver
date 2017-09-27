@@ -21,6 +21,6 @@ namespace LogSolver.Actions
         }
 
 
-        public override string ToString() => $"{Name} {package} to {van}";
+        public override string ToString() => $"{base.ToString()} {package} to {van}";
     }
 }

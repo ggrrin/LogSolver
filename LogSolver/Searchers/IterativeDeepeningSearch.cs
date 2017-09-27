@@ -9,15 +9,15 @@ namespace LogSolver.Searchers
     {
         protected uint overallExpandedNodes;
         protected uint overallMaxDepth;
-        protected DepthFirstSearch dfs;
+        protected DepthFirstSearch<State, Node<State>> dfs;
 
         public SearchMode Mode { get; }
-        public uint ExpandedNodes => overallExpandedNodes + dfs?.ExpandedNodes ?? 0;
-        public uint MaxDepth => Math.Max(overallMaxDepth, dfs?.ExpandedNodes ?? 0);
+        public uint ExpandedNodesStat => overallExpandedNodes + dfs?.ExpandedNodesStat ?? 0;
+        public uint MaxDepthStat => Math.Max(overallMaxDepth, dfs?.ExpandedNodesStat ?? 0);
         public int DepthLimit { get; }
         public INodeExpander<State, Node<State>> Expander { get; }
 
-        public IterativeDeepeningSearch(int depthLimit, INodeExpander<State, Node<State>> expander, SearchMode mode)
+        public IterativeDeepeningSearch( INodeExpander<State, Node<State>> expander, SearchMode mode, int depthLimit = Int32.MaxValue - 1)
         {
             Expander = expander;
             Mode = mode;
@@ -26,18 +26,17 @@ namespace LogSolver.Searchers
 
         public IEnumerable<Node<State>> Search(Node<State> initialNode)
         {
-            for (int i = 0; i < DepthLimit; i++)
+            for (int i = 0; i <= DepthLimit; i++)
             {
-                dfs = new DepthFirstSearch(i, Expander, Mode);
+                dfs = new DepthFirstSearch<State, Node<State>>(Expander, Mode, i);
                 foreach (var resultNode in dfs.Search(initialNode))
                 {
                     yield return resultNode;
                 }
-                overallExpandedNodes += dfs.ExpandedNodes;
-                overallMaxDepth = Math.Max(overallMaxDepth, dfs.MaxDepth);
+                overallExpandedNodes += dfs.ExpandedNodesStat;
+                overallMaxDepth = Math.Max(overallMaxDepth, dfs.MaxDepthStat);
             }
             dfs = null;
         }
-
     }
 }

@@ -10,11 +10,191 @@ using LogSolver.Searchers;
 
 namespace LogSolver
 {
-
-    public delegate void Test(string inputFilePath, SearchMode mode);
-
     class Program
     {
+
+
+        static void Main(string[] args)
+        {
+            //Random r = new Random();
+            //var h = new Heap<int>();
+            //const int num = 1000;
+            //for (int i = 0; i < num; i++)
+            //{
+            //    var x = r.Next(10000);
+            //    h.Add(x);
+            //    Console.Write($"{x} ");
+            //}
+
+            //Console.WriteLine();
+
+
+            //var prev = -1;
+            //for (int i = 0; i < num; i++)
+            //{
+            //    var x = h.ExtractMin();
+            //    Console.Write($"{x} ");
+
+            //    if (x < prev)
+            //    {
+            //        Console.Write($"Error ");
+            //        break;
+
+            //    }
+            //    prev = x;
+            //}
+            //Console.WriteLine();
+
+
+            /////////////////
+            //simple inputs//
+            /////////////////
+
+            //Uninformed tree search
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
+
+            //Uninformed graph search
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS, SearchMode.GraphSearch);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS, SearchMode.GraphSearch);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS, SearchMode.GraphSearch);
+
+            //Informed astar tree search
+            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
+
+
+            //////////
+            //inputs//
+            //////////
+
+            //TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), BFS);
+        }
+
+        static void IDS(string input, SearchMode mode)
+        {
+            var nodeFactory = new DefaultNodeFactory();
+            var expander = new DummyNodeExpander<Node<State>>(nodeFactory);
+            var searcher = new IterativeDeepeningSearch(expander, mode);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            var res = results.First();
+            Console.WriteLine($"Result:\r\n{res.Dump()}");
+            Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+        }
+
+        static void DFS(string input, SearchMode mode)
+        {
+            var nodeFactory = new DefaultNodeFactory();
+            var expander = new DummyNodeExpander<Node<State>>(nodeFactory);
+            var searcher = new DepthFirstSearch<State, Node<State>>(expander, mode, 10000);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            var res = results.First();
+            Console.WriteLine($"Result:\r\n{res.Dump()}");
+            Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+        }
+
+        static void BFS(string input, SearchMode mode)
+        {
+            var nodeFactory = new DefaultNodeFactory();
+            var expander = new DummyNodeExpander<Node<State>>(nodeFactory);
+            var searcher = new BreathFirstSearch(expander, mode);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            var res = results.First();
+            Console.WriteLine($"Result:\r\n{res.Dump()}");
+            Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+        }
+
+        static void ABFS(string input, SearchMode mode)
+        {
+            
+            var nodeFactory = new AStarNodeFactory(new PathRemaninerPriceEstimator());//new SimpleRemainerPriceEstimator());
+            var expander = new DummyNodeExpander<AStarNode<State>>(nodeFactory);
+            var searcher = new AStarBreathFirstSearch(expander, mode);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            foreach (var res in results)
+            {
+                Console.WriteLine($"==Solution==");
+                Console.WriteLine($"Result:\r\n{res.Dump()}");
+
+                Console.WriteLine($"==Solution stats==");
+                Console.WriteLine($"Depth: {res.Depth}");
+                Console.WriteLine($"Price: {res.PathPrice}");
+                Console.WriteLine($"PriceEstimate: {res.GoalPriceEstimate}");
+
+                Console.WriteLine($"==Searcher stats==");
+                Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+                Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+                if (Console.ReadKey(false).Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine($"Aborting search...");
+                    break;
+                }
+                Console.WriteLine($"Searching next solution: =>>>>>>>>>>>>>>>>>>>>>>");
+            }
+        }
+
+        static void AIDS(string input, SearchMode mode)
+        {
+            //new PathRemaninerPriceEstimator());//
+            var nodeFactory = new AStarNodeFactory(new SimpleRemainerPriceEstimator());
+            var expander = new SortedDummyNodeExpander<AStarNode<State>>(nodeFactory, descendingOrder: false);
+            var searcher = new AStarIterativeDeepeningSearch(expander, mode);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            //var res = results.First();
+            foreach (var res in results)
+            {
+
+                Console.WriteLine($"==Solution==");
+                Console.WriteLine($"Result:\r\n{res.Dump()}");
+
+                Console.WriteLine($"==Solution stats==");
+                Console.WriteLine($"Depth: {res.Depth}");
+                Console.WriteLine($"Price: {res.PathPrice}");
+                Console.WriteLine($"PriceEstimate: {res.GoalPriceEstimate}");
+
+                Console.WriteLine($"==Searcher stats==");
+                Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
+                Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+                Console.WriteLine($"MaxCostLimit: {searcher.MaxCostLimitStat}");
+                if (Console.ReadKey(false).Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine($"Aborting search...");
+                    break;
+                }
+                Console.WriteLine($"Searching next solution: =>>>>>>>>>>>>>>>>>>>>>>");
+            }
+        }
+
+        static void TestInputs(FileInfo inputsFile, Test test, SearchMode mode = SearchMode.TreeSearch)
+        {
+            var inputs = File.ReadAllLines(inputsFile.FullName);
+            foreach (var inputFileName in inputs)
+            {
+                Console.WriteLine("-------------------------------------------------------------");
+                Console.WriteLine($"Running: {inputFileName}");
+
+                var watch = Stopwatch.StartNew();
+                test(Path.Combine(inputsFile.Directory.FullName, inputFileName), mode);
+                watch.Stop();
+
+                Console.WriteLine($"Time: {watch.Elapsed}");
+            }
+        }
         static void HashTest()
         {
             var nodeFactory = new DefaultNodeFactory();
@@ -45,101 +225,6 @@ namespace LogSolver
             bool r0 = nmove1Hash == nmove2xHash;
             bool r1 = unload1Hash == unload2Hash;
             bool r2 = unload1.State == unload2.State;
-
-
-        }
-
-        static void Main(string[] args)
-        {
-            //simple inputs
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
-
-            //TOO slow
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS, SearchMode.GraphSearch);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS, SearchMode.GraphSearch);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS, SearchMode.GraphSearch);
-
-
-
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
-
-            //TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), BFS);
-        }
-
-        static void IDS(string input, SearchMode mode)
-        {
-            var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander<Node<State>> (nodeFactory);
-            var searcher = new IterativeDeepeningSearch(int.MaxValue, expander, mode);
-            var parser = new Parser(input);
-
-            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
-            var res = results.First();
-            Console.WriteLine($"Result:\r\n{res.Dump()}");
-            Console.WriteLine($"MaxDepth: {searcher.MaxDepth}");
-            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodes}");
-        }
-
-        static void DFS(string input, SearchMode mode)
-        {
-            var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander<Node<State>> (nodeFactory);
-            var searcher = new DepthFirstSearch(10000, expander, mode);
-            var parser = new Parser(input);
-
-            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
-            var res = results.First();
-            Console.WriteLine($"Result:\r\n{res.Dump()}");
-            Console.WriteLine($"MaxDepth: {searcher.MaxDepth}");
-            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodes}");
-        }
-
-        static void BFS(string input, SearchMode mode)
-        {
-            var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander<Node<State>>(nodeFactory);
-            var searcher = new BreathFirstSearch(expander, mode);
-            var parser = new Parser(input);
-
-            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
-            var res = results.First();
-            Console.WriteLine($"Result:\r\n{res.Dump()}");
-            Console.WriteLine($"MaxDepth: {searcher.MaxDepth}");
-            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodes}");
-        }
-
-        static void ABFS(string input, SearchMode mode)
-        {
-            var nodeFactory = new AStarNodeFactory(new SimpleRemainerPriceEstimator());
-            var expander = new DummyNodeExpander<AStarNode<State>>(nodeFactory);
-            var searcher = new AStarBreathFirstSearch(expander, mode);
-            var parser = new Parser(input);
-
-            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
-            var res = results.First();
-            Console.WriteLine($"Result:\r\n{res.Dump()}");
-            Console.WriteLine($"MaxDepth: {searcher.MaxDepth}");
-            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodes}");
-        }
-
-        static void TestInputs(FileInfo inputsFile, Test test, SearchMode mode = SearchMode.TreeSearch)
-        {
-            var inputs = File.ReadAllLines(inputsFile.FullName);
-            foreach (var inputFileName in inputs)
-            {
-                Console.WriteLine("-------------------------------------------------------------");
-                Console.WriteLine($"Running: {inputFileName}");
-
-                var watch = Stopwatch.StartNew();
-                test(Path.Combine(inputsFile.Directory.FullName, inputFileName), mode);
-                watch.Stop();
-
-                Console.WriteLine($"Time: {watch.Elapsed}");
-            }
         }
     }
 }

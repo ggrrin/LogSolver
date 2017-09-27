@@ -6,58 +6,10 @@ using LogSolver.ProblemAbstration;
 
 namespace LogSolver.Searchers
 {
-    public class AStarBreathFirstSearch : ISearchAlgorithm<State, AStarNode<State>>
-    {
-        public uint ExpandedNodes { get; protected set; }
-        public uint MaxDepth { get; protected set; }
-        public INodeExpander<State, AStarNode<State>> Expander { get; }
-
-        public SearchMode Mode { get; }
-
-        public AStarBreathFirstSearch(INodeExpander<State, AStarNode<State>> expander, SearchMode mode)
-        {
-            Expander = expander;
-            Mode = mode;
-        }
-
-        public IEnumerable<AStarNode<State>> Search(AStarNode<State> initialNode)
-        {
-            var closedNodes = new HashSet<State>();
-
-            var fringesPriorityQueue = new Heap<AStarNode<State>>(new[] { initialNode });
-
-            while (fringesPriorityQueue.Any())
-            {
-                var currentNode = fringesPriorityQueue.ExtractMin();
-                if (Mode == SearchMode.GraphSearch)
-                {
-                    if (closedNodes.Contains(currentNode.State))
-                        continue;
-                    else
-                        closedNodes.Add(currentNode.State);
-                }
-
-                MaxDepth = Math.Max(MaxDepth, currentNode.Depth);
-                if (currentNode.IsGoalState())
-                    yield return currentNode;
-                else
-                {
-                    foreach (var node in Expander.ExpandNode(currentNode))
-                    {
-                        fringesPriorityQueue.Add(node);
-                        ExpandedNodes++;
-                    }
-                }
-            }
-        }
-
-    }
-
-
     public class BreathFirstSearch : ISearchAlgorithm<State, Node<State>>
     {
-        public uint ExpandedNodes { get; protected set; }
-        public uint MaxDepth { get; protected set; }
+        public uint ExpandedNodesStat { get; protected set; }
+        public uint MaxDepthStat { get; protected set; }
         public INodeExpander<State, Node<State>> Expander { get; }
 
         public SearchMode Mode { get; }
@@ -89,13 +41,13 @@ namespace LogSolver.Searchers
                             closedNodes.Add(currentNode.State);
                     }
 
-                    MaxDepth = Math.Max(MaxDepth, currentNode.Depth);
+                    MaxDepthStat = Math.Max(MaxDepthStat, currentNode.Depth);
                     if (currentNode.IsGoalState())
                         yield return currentNode;
                     else
                     {
                         fringesQueue.Enqueue(Expander.ExpandNode(currentNode));
-                        ExpandedNodes++;
+                        ExpandedNodesStat++;
                     }
                 }
             }

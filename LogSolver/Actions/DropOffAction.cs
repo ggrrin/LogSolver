@@ -18,6 +18,6 @@ namespace LogSolver.Actions
             return parentState.CloneChangingDropOffPackage(package);
         }
 
-        public override string ToString() => $"{Name} {package}";
+        public override string ToString() => $"{base.ToString()} {package}";
     }
 }

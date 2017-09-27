@@ -14,5 +14,7 @@ namespace LogSolver.ProblemAbstration
         }
 
         public abstract State PerformAction(State parentState);
+
+        public override string ToString() => $"{Name}[{ActionCost}]:";
     }
 }

@@ -30,11 +30,19 @@ namespace LogSolver.DefaultStructuresImplementation
             var node = this;
             while (node != null)
             {
-                sb.AppendLine(node.Action.ToString());
+                sb.AppendLine(node.ToString(PathPrice));
                 node = node.Parent;
             }
             return sb.ToString();
         }
+
+        public virtual string ToString(int fullPathPrice)
+        {
+            return
+                $"{PathPrice}/{fullPathPrice}|| {string.Join(" ", State.Packages.Select(p => $"[{p.Location.Identifier}|{p.Destination.Identifier}]"))} {Action}";
+        }
+
+        public override string ToString() => ToString(0);
 
         public bool IsGoalState()
         {
