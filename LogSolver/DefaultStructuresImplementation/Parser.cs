@@ -78,15 +78,12 @@ namespace LogSolver.DefaultStructuresImplementation
                     packagesDestinatioIdentifiers[i] = parsedLine[1];
                 }
 
-                return new State(placesCitiesIdentifiers,
-                    airportsIdentifiers,
+                return State.CreateInitState(placesCitiesIdentifiers,
                     vansPlaceIdentifiers,
                     planesLocationsIdentifiers,
                     packagesLocationIdentifiers,
-                    packagesDestinatioIdentifiers,
-                    Enumerable.Repeat(PackageLocationEnum.Store, (int)packagesCount).ToArray(),
-                    Enumerable.Repeat(new HashSet<uint>(), (int)vansCount).ToArray(),
-                    Enumerable.Repeat(new HashSet<uint>(), (int)planesCount).ToArray());
+                    airportsIdentifiers,
+                    packagesDestinatioIdentifiers);
             }
         }
     }

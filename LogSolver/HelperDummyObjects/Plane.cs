@@ -15,9 +15,11 @@ namespace LogSolver.HelperDummyObjects
             this.state = state;
         }
 
+        public const int maxPlaneLoad = 30;
         public Place Place => new Place(state.PlanesLocationsIdentifiers[(int)Identifier], state);
         public HashSet<uint> Packages => state.PlanesLoads[(int)Identifier];
-        public bool IsFull => Packages.Count >= 30;
+        public bool IsFull => Packages.Count >= maxPlaneLoad;
+        public int FreeStorageCount => maxPlaneLoad - Packages.Count;
 
         public bool Equals(Plane other) => Identifier == other.Identifier; 
 

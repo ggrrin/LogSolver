@@ -8,6 +8,7 @@ namespace LogSolver.HelperDummyObjects
     {
         private readonly State state;
         public uint Identifier { get; }
+        public bool IsAirport => State.AirportsIdentifiers.Contains(Identifier);
 
         public Place(uint identifier, State state)
         {
@@ -15,7 +16,7 @@ namespace LogSolver.HelperDummyObjects
             this.Identifier = identifier;
         }
 
-        public City City => new City(state.PlacesCitiesIdentifiers[(int)Identifier], state);
+        public City City => new City(State.PlacesCitiesIdentifiers[(int)Identifier], state);
 
         public IEnumerable<Plane> Planes
         {

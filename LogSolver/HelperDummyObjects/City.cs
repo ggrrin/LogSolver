@@ -20,9 +20,9 @@ namespace LogSolver.HelperDummyObjects
         {
             get
             {
-                for (uint i = 0; i < state.PlacesCitiesIdentifiers.Count; i++)
+                for (uint i = 0; i < State.PlacesCitiesIdentifiers.Count; i++)
                 {
-                    if (state.PlacesCitiesIdentifiers[(int)i] == Identifier)
+                    if (State.PlacesCitiesIdentifiers[(int)i] == Identifier)
                         yield return new Place(i, state);
                 }
             }

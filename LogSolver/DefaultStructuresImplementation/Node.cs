@@ -5,7 +5,7 @@ using LogSolver.ProblemAbstration;
 
 namespace LogSolver.DefaultStructuresImplementation
 {
-    public class Node<TState> : INode<TState> where TState : class,IState
+    public class Node<TState> : INode<TState> where TState : class, IState
     {
 
         public TState State { get; set; }
@@ -20,7 +20,7 @@ namespace LogSolver.DefaultStructuresImplementation
             Parent = parent;
             Action = action;
             PathPrice = (parent?.PathPrice ?? 0) + action.ActionCost;
-            Depth = (uint) (((int?)(parent?.Depth) ?? -1) + 1);
+            Depth = (uint)(((int?)(parent?.Depth) ?? -1) + 1);
             State = action.PerformAction(parent?.State);
         }
 

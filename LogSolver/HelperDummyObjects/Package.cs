@@ -11,7 +11,7 @@ namespace LogSolver.HelperDummyObjects
         public PackageLocationEnum LocationType => state.PackagesLocationTypes[(int) Identifier];
 
 
-        public Place Destination => new Place(state.PackagesDestinatioIdentifiers[(int)Identifier], state);
+        public Place Destination => new Place(State.PackagesDestinatioIdentifiers[(int)Identifier], state);
         public Place Location => new Place(state.PackagesLocationIdentifiers[(int)Identifier], state);
         public bool IsInDestination => Destination == Location && LocationType == PackageLocationEnum.Store;//TODO opt 
 

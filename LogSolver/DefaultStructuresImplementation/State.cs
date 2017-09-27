@@ -8,37 +8,44 @@ namespace LogSolver.DefaultStructuresImplementation
 {
     public class State : IState
     {
-        private readonly uint[] placesCitiesIdentifiers;
-        private readonly uint[] airportsIdentifiers;
+        public static HashSet<uint> AirportsIdentifiers { get; protected set; }
+        public static IReadOnlyList<uint> PackagesDestinatioIdentifiers { get; protected set; }
+        public static IReadOnlyList<uint> PlacesCitiesIdentifiers { get; protected set; }
+
         private readonly uint[] vansPlaceIdentifiers;
         private readonly uint[] planesLocationsIdentifiers;
         private readonly uint[] packagesLocationIdentifiers;
-        private readonly uint[] packagesDestinatioIdentifiers;
         private readonly PackageLocationEnum[] packagesLocationTypes;
         private readonly HashSet<uint>[] vansLoads;
         private readonly HashSet<uint>[] planesLoads;
 
-        public IReadOnlyList<uint> PlacesCitiesIdentifiers => placesCitiesIdentifiers;
-        public IReadOnlyList<uint> AirportsIdentifiers => airportsIdentifiers;
         public IReadOnlyList<uint> VansPlaceIdentifiers => vansPlaceIdentifiers;
         public IReadOnlyList<uint> PlanesLocationsIdentifiers => planesLocationsIdentifiers;
         public IReadOnlyList<uint> PackagesLocationIdentifiers => packagesLocationIdentifiers;
-        public IReadOnlyList<uint> PackagesDestinatioIdentifiers => packagesDestinatioIdentifiers;
         public IReadOnlyList<PackageLocationEnum> PackagesLocationTypes => packagesLocationTypes;
         public IReadOnlyList<HashSet<uint>> VansLoads => vansLoads;
         public IReadOnlyList<HashSet<uint>> PlanesLoads => planesLoads;
 
-        public State(uint[] placesCitiesIdentifiers, uint[] airportsIdentifiers, uint[] vansPlaceIdentifiers,
-            uint[] planesLocationsIdentifiers, uint[] packagesLocationIdentifiers,
-            uint[] packagesDestinatioIdentifiers, PackageLocationEnum[] packagesLocationTypes,
-            HashSet<uint>[] vansLoads, HashSet<uint>[] planesLoads)
+
+        public static State CreateInitState(uint[] placesCitiesIdentifiers, uint[] vansPlaceIdentifiers, uint[] planesLocationsIdentifiers,
+            uint[] packagesLocationIdentifiers, uint[] airportsIdentifiers, uint[] packagesDestinationIdentifiers)
         {
-            this.placesCitiesIdentifiers = placesCitiesIdentifiers;
-            this.airportsIdentifiers = airportsIdentifiers;
+            AirportsIdentifiers = new HashSet<uint>(airportsIdentifiers);
+            PackagesDestinatioIdentifiers = packagesDestinationIdentifiers;
+            PlacesCitiesIdentifiers = placesCitiesIdentifiers;
+
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers,
+                    Enumerable.Repeat(PackageLocationEnum.Store, packagesLocationIdentifiers.Length).ToArray(),
+                    Enumerable.Repeat(new HashSet<uint>(), vansPlaceIdentifiers.Length).ToArray(),
+                    Enumerable.Repeat(new HashSet<uint>(), planesLocationsIdentifiers.Length).ToArray());
+        }
+
+        protected State(uint[] vansPlaceIdentifiers, uint[] planesLocationsIdentifiers, uint[] packagesLocationIdentifiers,
+            PackageLocationEnum[] packagesLocationTypes, HashSet<uint>[] vansLoads, HashSet<uint>[] planesLoads)
+        {
             this.vansPlaceIdentifiers = vansPlaceIdentifiers;
             this.planesLocationsIdentifiers = planesLocationsIdentifiers;
             this.packagesLocationIdentifiers = packagesLocationIdentifiers;
-            this.packagesDestinatioIdentifiers = packagesDestinatioIdentifiers;
             this.packagesLocationTypes = packagesLocationTypes;
             this.vansLoads = vansLoads;
             this.planesLoads = planesLoads;
@@ -55,48 +62,28 @@ namespace LogSolver.DefaultStructuresImplementation
 
         public State CloneChangingVanLocation(Van van, Place newPlace)
         {
-            var vans = VansPlaceIdentifiers.ToArray();
-            vans[van.Identifier] = newPlace.Identifier;
+            var xvansPlaceIdentifiers = VansPlaceIdentifiers.ToArray();
+            xvansPlaceIdentifiers[van.Identifier] = newPlace.Identifier;
 
             var xpackagesLocationIdentifiers = packagesLocationIdentifiers.ToArray();
             foreach (var packageIdentifier in van.Packages)
                 xpackagesLocationIdentifiers[packageIdentifier] = newPlace.Identifier;
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vans,
-                planesLocationsIdentifiers,
-                xpackagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                packagesLocationTypes,
-                vansLoads,
-                planesLoads);
-
-            return res;
+            return new State(xvansPlaceIdentifiers, planesLocationsIdentifiers, xpackagesLocationIdentifiers, packagesLocationTypes, vansLoads, planesLoads);
         }
 
         public State CloneChangingPlaneLocation(Plane plane, City city)
         {
-            var planesLocations = PlanesLocationsIdentifiers.ToArray();
+            var xplanesLocationIdentifiers = PlanesLocationsIdentifiers.ToArray();
             var airports = new HashSet<uint>(AirportsIdentifiers);
             var airportIdentifier = city.Places.First(p => airports.Contains(p.Identifier)).Identifier;
-            planesLocations[plane.Identifier] = airportIdentifier;
+            xplanesLocationIdentifiers[plane.Identifier] = airportIdentifier;
 
             var xpackagesLocationIdentifiers = packagesLocationIdentifiers.ToArray();
             foreach (var packageIdentifier in plane.Packages)
                 xpackagesLocationIdentifiers[packageIdentifier] = airportIdentifier;
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vansPlaceIdentifiers,
-                planesLocations,
-                xpackagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                packagesLocationTypes,
-                vansLoads,
-                planesLoads);
-
-            return res;
+            return new State(vansPlaceIdentifiers, xplanesLocationIdentifiers, xpackagesLocationIdentifiers, packagesLocationTypes, vansLoads, planesLoads);
         }
 
         public State CloneChangingLoadPackage(Package package, Van van)
@@ -109,17 +96,7 @@ namespace LogSolver.DefaultStructuresImplementation
             xvansLoads[van.Identifier] = new HashSet<uint>(xvansLoads[van.Identifier]); //clone only modified van
             xvansLoads[van.Identifier].Add(package.Identifier);
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vansPlaceIdentifiers,
-                planesLocationsIdentifiers,
-                packagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                xpackagesLocationTypes,
-                xvansLoads,
-                planesLoads);
-
-            return res;
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
         }
 
         public State CloneChangingUnLoadPackage(Package package)
@@ -133,17 +110,7 @@ namespace LogSolver.DefaultStructuresImplementation
             xvansLoads[van.Identifier] = new HashSet<uint>(xvansLoads[van.Identifier]); //clone only modified van
             xvansLoads[van.Identifier].Remove(package.Identifier);
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vansPlaceIdentifiers,
-                planesLocationsIdentifiers,
-                packagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                xpackagesLocationTypes,
-                xvansLoads,
-                planesLoads);
-
-            return res;
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
         }
 
         public State CloneChangingPickUpPackage(Package package, Plane plane)
@@ -156,17 +123,7 @@ namespace LogSolver.DefaultStructuresImplementation
             xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
             xplanesLoads[plane.Identifier].Add(package.Identifier);
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vansPlaceIdentifiers,
-                planesLocationsIdentifiers,
-                packagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                xpackagesLocationTypes,
-                vansLoads,
-                xplanesLoads);
-
-            return res;
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
         }
 
         public State CloneChangingDropOffPackage(Package package)
@@ -180,17 +137,7 @@ namespace LogSolver.DefaultStructuresImplementation
             xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
             xplanesLoads[plane.Identifier].Remove(package.Identifier);
 
-            var res = new State(placesCitiesIdentifiers,
-                airportsIdentifiers,
-                vansPlaceIdentifiers,
-                planesLocationsIdentifiers,
-                packagesLocationIdentifiers,
-                packagesDestinatioIdentifiers,
-                xpackagesLocationTypes,
-                vansLoads,
-                xplanesLoads);
-
-            return res;
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
         }
 
         public bool Equals(IState other)
@@ -198,19 +145,16 @@ namespace LogSolver.DefaultStructuresImplementation
             if (other == null)
                 return false;
 
-            bool res = Enumerable.SequenceEqual(PlacesCitiesIdentifiers, other.PlacesCitiesIdentifiers) &&
-                       Enumerable.SequenceEqual(AirportsIdentifiers, other.AirportsIdentifiers) &&
-                       Enumerable.SequenceEqual(VansPlaceIdentifiers, other.VansPlaceIdentifiers) &&
+            bool res = Enumerable.SequenceEqual(VansPlaceIdentifiers, other.VansPlaceIdentifiers) &&
                        Enumerable.SequenceEqual(PlanesLocationsIdentifiers, other.PlanesLocationsIdentifiers) &&
                        Enumerable.SequenceEqual(PackagesLocationIdentifiers, other.PackagesLocationIdentifiers) &&
-                       //packageDestinationIdentifires skipped -> they are not changed
                        Enumerable.SequenceEqual(packagesLocationTypes, other.PackagesLocationTypes) &&
 
-                         vansLoads.Zip(other.VansLoads,
+                       vansLoads.Zip(other.VansLoads,
                                 (loads1, loads2) => loads1.All(l1 => loads2.Contains(l1)) && loads2.All(l2 => loads1.Contains(l2)))
                             .All(x => x == true) &&
 
-                        planesLoads.Zip(other.PlanesLoads,
+                       planesLoads.Zip(other.PlanesLoads,
                                 (loads1, loads2) => loads1.All(l1 => loads2.Contains(l1)) && loads2.All(l2 => loads1.Contains(l2)))
                             .All(x => x == true);
             return res;
@@ -225,12 +169,9 @@ namespace LogSolver.DefaultStructuresImplementation
 
         public override int GetHashCode()
         {
-            int resultHash = ((IStructuralEquatable)placesCitiesIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
-                ((IStructuralEquatable)airportsIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
-                ((IStructuralEquatable)vansPlaceIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
+            int resultHash = ((IStructuralEquatable)vansPlaceIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
                 ((IStructuralEquatable)planesLocationsIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
                 ((IStructuralEquatable)packagesLocationIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^
-                //((IStructuralEquatable)packagesDestinatioIdentifiers).GetHashCode(EqualityComparer<uint>.Default) ^ //destination is not changed
                 ((IStructuralEquatable)packagesLocationTypes).GetHashCode(EqualityComparer<PackageLocationEnum>.Default);
 
             foreach (HashSet<uint> loads in vansLoads)

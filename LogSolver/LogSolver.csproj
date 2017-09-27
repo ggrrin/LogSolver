@@ -62,6 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultStructuresImplementation\AStarNode.cs" />
+    <Compile Include="DefaultStructuresImplementation\AStarNodeFactory.cs" />
+    <Compile Include="DefaultStructuresImplementation\IRemainerPriceEstimator.cs" />
+    <Compile Include="DefaultStructuresImplementation\SimpleRemaninerPriceEstimator.cs" />
     <Compile Include="ProblemAbstration\ActionBase.cs" />
     <Compile Include="Searchers\BreathFirstSearch.cs" />
     <Compile Include="HelperDummyObjects\City.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Searchers\DepthFirstSearch.cs" />
     <Compile Include="Searchers\Heap.cs" />
     <Compile Include="Searchers\IterativeDeepeningSearch.cs" />
+    <Compile Include="Searchers\SearchMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

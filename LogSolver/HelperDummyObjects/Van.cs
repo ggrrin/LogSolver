@@ -17,8 +17,10 @@ namespace LogSolver.HelperDummyObjects
             this.state = state;
         }
 
+        public const int maxVanLoad = 4;
         public Place Place => new Place(state.VansPlaceIdentifiers[(int)Identifier], state);
-        public bool IsFull => Packages.Count >= 4;
+        public bool IsFull => Packages.Count >= maxVanLoad;
+        public int FreeStorageCount => maxVanLoad - Packages.Count; 
 
         public bool Equals(Van other) => Identifier == other.Identifier;
 

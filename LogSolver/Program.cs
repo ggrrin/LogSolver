@@ -51,22 +51,21 @@ namespace LogSolver
 
         static void Main(string[] args)
         {
-            var h = new Heap<int>(new []{5,3,21,1,4,35,432,2,32,12});
-            h.Add(31);
-            h.Add(310);
-            h.Add(131);
-            h.Add(1531);
-            h.Sort();
-
             //simple inputs
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
-            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
 
             //TOO slow
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), BFS, SearchMode.GraphSearch);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS, SearchMode.GraphSearch);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS, SearchMode.GraphSearch);
+
+
+
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), DFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), IDS);
 
             //TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), BFS);
         }
@@ -74,7 +73,7 @@ namespace LogSolver
         static void IDS(string input, SearchMode mode)
         {
             var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander(nodeFactory);
+            var expander = new DummyNodeExpander<Node<State>> (nodeFactory);
             var searcher = new IterativeDeepeningSearch(int.MaxValue, expander, mode);
             var parser = new Parser(input);
 
@@ -88,7 +87,7 @@ namespace LogSolver
         static void DFS(string input, SearchMode mode)
         {
             var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander(nodeFactory);
+            var expander = new DummyNodeExpander<Node<State>> (nodeFactory);
             var searcher = new DepthFirstSearch(10000, expander, mode);
             var parser = new Parser(input);
 
@@ -102,8 +101,22 @@ namespace LogSolver
         static void BFS(string input, SearchMode mode)
         {
             var nodeFactory = new DefaultNodeFactory();
-            var expander = new DummyNodeExpander(nodeFactory);
+            var expander = new DummyNodeExpander<Node<State>>(nodeFactory);
             var searcher = new BreathFirstSearch(expander, mode);
+            var parser = new Parser(input);
+
+            var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
+            var res = results.First();
+            Console.WriteLine($"Result:\r\n{res.Dump()}");
+            Console.WriteLine($"MaxDepth: {searcher.MaxDepth}");
+            Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodes}");
+        }
+
+        static void ABFS(string input, SearchMode mode)
+        {
+            var nodeFactory = new AStarNodeFactory(new SimpleRemainerPriceEstimator());
+            var expander = new DummyNodeExpander<AStarNode<State>>(nodeFactory);
+            var searcher = new AStarBreathFirstSearch(expander, mode);
             var parser = new Parser(input);
 
             var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));

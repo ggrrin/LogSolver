@@ -76,7 +76,7 @@ namespace LogSolver.Searchers
         public TNode ExtractMin()
         {
             TNode res = extract_min(0, buffer.Count);
-            buffer.RemoveAt(buffer.Count);
+            buffer.RemoveAt(buffer.Count - 1);
             return res;
         }
 
