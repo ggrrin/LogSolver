@@ -3,7 +3,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Actions
 {
-    public class DropOffAction :ActionBase
+    public class DropOffAction : ActionBase
     {
         private readonly Package package;
 

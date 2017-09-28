@@ -3,7 +3,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Actions
 {
-    public class PickUpAction :ActionBase
+    public class PickUpAction : ActionBase
     {
         private readonly Plane plane;
         private readonly Package package;

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using LogSolver.Actions;
 using LogSolver.Architecture;
 using LogSolver.DummyObjects;
@@ -12,7 +13,7 @@ namespace LogSolver.Estimators
         public int CalculateEstimate(State state)
         {
             int freePlaneStorageCount = 1;// + state.Planes.Min(p => p.FreeStorageCount);
-            int freeVanStorageCount = 1;// +state.Vans.Min(v => v.FreeStorageCount);
+            int freeVanStorageCount = 1;// + state.Vans.Min(v => v.FreeStorageCount);
 
             int other = 0;
             int totalFlyCost = 0;
@@ -22,16 +23,24 @@ namespace LogSolver.Estimators
                 //have to fly
                 if (package.Location.City != package.Destination.City)
                 {
+
                     //have to get to the airport
                     if (!package.Location.IsAirport)
                     {
+                        //no empty van there
+                        if (!package.Location.Vans.Any(v => !v.IsFull))
+                            other += new DriveAction(default(Van), default(Place)).ActionCost;
+
                         if (package.LocationType != PackageLocationEnum.Van)
-                        {
                             other += new LoadAction(default(Package), default(Van)).ActionCost;
-                        }
+
                         totalDriveCost += new DriveAction(default(Van), default(Place)).ActionCost;
                         other += new UnLoadAction(default(Package)).ActionCost;
                     }
+
+                    //no plane there
+                    if (!package.Location.City.Planes.Any(p => !p.IsFull))
+                        other += new FlyAction(default(City), default(Plane)).ActionCost;
 
                     //fly
                     if (package.LocationType != PackageLocationEnum.Plane)
@@ -44,6 +53,10 @@ namespace LogSolver.Estimators
                     //have to get from the airport
                     if (!package.Destination.IsAirport)
                     {
+                        //no empty van there
+                        if (!package.Destination.Vans.Any(v => !v.IsFull))
+                            other += new DriveAction(default(Van), default(Place)).ActionCost;
+
                         other += new LoadAction(default(Package), default(Van)).ActionCost;
                         totalDriveCost += new DriveAction(default(Van), default(Place)).ActionCost;
                         other += new UnLoadAction(default(Package)).ActionCost;
@@ -51,7 +64,14 @@ namespace LogSolver.Estimators
                 }
                 else //move just in city
                 {
-                    if(package.LocationType != PackageLocationEnum.Van)
+                    //no empty van there
+                    if (!package.Location.Vans.Any(v => !v.IsFull))
+                        other += new DriveAction(default(Van), default(Place)).ActionCost;
+
+                    if (package.LocationType == PackageLocationEnum.Plane)
+                        other += new UnLoadAction(default(Package)).ActionCost;
+
+                    if (package.LocationType != PackageLocationEnum.Van)
                         other += new LoadAction(default(Package), default(Van)).ActionCost;
 
                     totalDriveCost += new DriveAction(default(Van), default(Place)).ActionCost;

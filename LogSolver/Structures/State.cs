@@ -57,6 +57,7 @@ namespace LogSolver.Structures
         public IEnumerable<City> Cities => AirportsIdentifiers.Select((a, i) => new City((uint)i, this));
         public IEnumerable<Plane> Planes => PlanesLocationsIdentifiers.Select((p, i) => new Plane((uint)i, this));
         public IEnumerable<Place> Places => PlacesCitiesIdentifiers.Select((c, i) => new Place((uint)i, this));
+        public IEnumerable<Place> Airports => AirportsIdentifiers.Select(i => new Place((uint)i, this));
         public IEnumerable<Package> Packages => PackagesLocationIdentifiers.Select((p, i) => new Package((uint)i, this));
 
 
@@ -100,6 +101,25 @@ namespace LogSolver.Structures
             return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
         }
 
+        public State CloneChangingBatchedLoadPackage(Package[] packages, Van van)
+        {
+            var xpackagesLocationTypes = packagesLocationTypes.ToArray();
+            foreach (var package in packages)
+            {
+                xpackagesLocationTypes[package.Identifier] = PackageLocationEnum.Van;
+            }
+
+            var xvansLoads = vansLoads.ToArray();
+
+            xvansLoads[van.Identifier] = new HashSet<uint>(xvansLoads[van.Identifier]); //clone only modified van
+            foreach (var package in packages)
+            {
+                xvansLoads[van.Identifier].Add(package.Identifier);
+            }
+
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
+        }
+
         public State CloneChangingUnLoadPackage(Package package)
         {
             var xpackagesLocationTypes = packagesLocationTypes.ToArray();
@@ -110,6 +130,26 @@ namespace LogSolver.Structures
             var van = package.Location.Vans.First(v => v.Packages.Contains(package.Identifier));
             xvansLoads[van.Identifier] = new HashSet<uint>(xvansLoads[van.Identifier]); //clone only modified van
             xvansLoads[van.Identifier].Remove(package.Identifier);
+
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
+        }
+
+        public State CloneChangingBatchedUnLoadPackage(Package[] packages)
+        {
+            var xpackagesLocationTypes = packagesLocationTypes.ToArray();
+
+            foreach (var package in packages)
+                xpackagesLocationTypes[package.Identifier] = PackageLocationEnum.Store;
+
+            var xvansLoads = vansLoads.ToArray();
+
+            var firstPackage = packages.First();
+            var van = firstPackage.Location.Vans.First(v => v.Packages.Contains(firstPackage.Identifier));
+            xvansLoads[van.Identifier] = new HashSet<uint>(xvansLoads[van.Identifier]); //clone only modified van
+            foreach (var package in packages)
+            {
+                xvansLoads[van.Identifier].Remove(package.Identifier);
+            }
 
             return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, xvansLoads, planesLoads);
         }
@@ -127,6 +167,22 @@ namespace LogSolver.Structures
             return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
         }
 
+
+        public State CloneChangingBatchedPickUpPackage(Package[] packages, Plane plane)
+        {
+            var xpackagesLocationTypes = packagesLocationTypes.ToArray();
+            foreach (var package in packages)
+                xpackagesLocationTypes[package.Identifier] = PackageLocationEnum.Plane;
+
+            var xplanesLoads = planesLoads.ToArray();
+
+            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
+            foreach (var package in packages)
+                xplanesLoads[plane.Identifier].Add(package.Identifier);
+
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
+        }
+
         public State CloneChangingDropOffPackage(Package package)
         {
             var xpackagesLocationTypes = packagesLocationTypes.ToArray();
@@ -137,6 +193,23 @@ namespace LogSolver.Structures
             var plane = package.Location.Planes.First(v => v.Packages.Contains(package.Identifier));
             xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
             xplanesLoads[plane.Identifier].Remove(package.Identifier);
+
+            return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
+        }
+
+        public State CloneChangingBatchedDropOffPackage(Package[] packages)
+        {
+            var xpackagesLocationTypes = packagesLocationTypes.ToArray();
+            foreach (var package in packages)
+                xpackagesLocationTypes[package.Identifier] = PackageLocationEnum.Store;
+
+            var xplanesLoads = planesLoads.ToArray();
+
+            var firstPackage = packages.First();
+            var plane = firstPackage.Location.Planes.First(v => v.Packages.Contains(firstPackage.Identifier));
+            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
+            foreach (var package in packages)
+                xplanesLoads[plane.Identifier].Remove(package.Identifier);
 
             return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
         }
@@ -183,5 +256,6 @@ namespace LogSolver.Structures
 
             return resultHash;
         }
+
     }
 }

@@ -33,8 +33,8 @@ namespace LogSolver
 
             //Informed astar tree search
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
-            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);//winner
-            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), RBFS);
+            //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
+            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), RBFS);//winner
 
 
             //////////
@@ -154,10 +154,13 @@ namespace LogSolver
         }
 
         static void RBFS(string input, SearchMode mode)
-        {
-            var nodeFactory = new RBFSNodeFactory(new PathRemaninerPriceEstimator());//new SimpleRemainerPriceEstimator());
+        {   
+            //var nodeFactory = new RBFSNodeFactory(new YPriceEstimator()); 
+            //var nodeFactory = new RBFSNodeFactory(new SimpleRemainerPriceEstimator());
+            //var nodeFactory = new RBFSNodeFactory(new PathRemaninerPriceEstimator());
+            var nodeFactory = new RBFSNodeFactory(new CombinePriceEstimator(new YPriceEstimator(), new PathRemaninerPriceEstimator()));
             var expander = new DummyNodeExpander<RBFSNode<State>>(nodeFactory);
-            var searcher = new RecursiveBestFirstSearch<RBFSNode<State>>(expander); 
+            var searcher = new RecursiveBestFirstSearch<RBFSNode<State>>(expander);
             var parser = new Parser(input);
 
             var results = searcher.Search(nodeFactory.CreateNode(null, new InitAction(parser)));
@@ -189,7 +192,7 @@ namespace LogSolver
         static void TestInputs(FileInfo inputsFile, TestFunc test, SearchMode mode = SearchMode.TreeSearch)
         {
             var inputs = File.ReadAllLines(inputsFile.FullName);
-            foreach (var inputFileName in inputs)
+            foreach (var inputFileName in inputs.Where(s => !s.StartsWith("#")))
             {
                 Console.WriteLine("-------------------------------------------------------------");
                 Console.WriteLine($"Running: {inputFileName}");

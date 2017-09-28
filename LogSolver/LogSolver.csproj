@@ -84,9 +84,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\AggregatedAction.cs" />
+    <Compile Include="Actions\BatchedDropOffAction.cs" />
+    <Compile Include="Actions\BatchedLoadAction.cs" />
+    <Compile Include="Actions\BatchedPickUpAction.cs" />
+    <Compile Include="Actions\BatchedUnLoadAction.cs" />
     <Compile Include="Architecture\IGoalEstimateNode.cs" />
+    <Compile Include="Estimators\CombinePriceEstimator.cs" />
+    <Compile Include="Estimators\YPriceEstimator.cs" />
+    <Compile Include="Expanders\YNodeExpander.cs" />
     <Compile Include="NodeFactories\RBFSNodeFactory.cs" />
     <Compile Include="Searchers\RecursiveBestFirstSearch.cs" />
+    <Compile Include="Helpers\StackFrame.cs" />
     <Compile Include="Structures\AStarNode.cs" />
     <Compile Include="NodeFactories\AStarNodeFactory.cs" />
     <Compile Include="Architecture\IRemainerPriceEstimator.cs" />
@@ -130,7 +139,7 @@
     <Compile Include="Helpers\Heap.cs" />
     <Compile Include="Searchers\IterativeDeepeningSearch.cs" />
     <Compile Include="Helpers\SearchMode.cs" />
-    <Compile Include="Helpers\Test.cs" />
+    <Compile Include="Helpers\TestFunc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

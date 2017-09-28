@@ -8,13 +8,6 @@ using LogSolver.Structures;
 
 namespace LogSolver.Searchers
 {
-    class X<TNode> where TNode : RBFSNode<State>
-    {
-        public TNode Node;
-        public Heap<TNode> Successors;
-        public int F_limit;
-    }
-
     public class RecursiveBestFirstSearch<TNode> : ISearchAlgorithm<State, TNode> where TNode : RBFSNode<State>
     {
         public uint ExpandedNodesStat { get; protected set; }
@@ -29,8 +22,8 @@ namespace LogSolver.Searchers
 
         public IEnumerable<TNode> Search(TNode initialNode)
         {
-            var stack = new Stack<X<TNode>>();
-            stack.Push(new X<TNode>
+            var stack = new Stack<StackFrame<TNode>>();
+            stack.Push(new StackFrame<TNode>
             {
                 Node = initialNode,
                 F_limit = int.MaxValue
@@ -67,7 +60,7 @@ namespace LogSolver.Searchers
                         {
                             var alternative = currentLayer.Successors.Any() ? currentLayer.Successors.PeekMin().GoalPriceEstimate : currentLayer.F_limit;
 
-                            stack.Push(new X<TNode>
+                            stack.Push(new StackFrame<TNode>
                             {
                                 Node = bestSuccessor,
                                 F_limit = Math.Min(currentLayer.F_limit, alternative),
