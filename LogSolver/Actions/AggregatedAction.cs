@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LogSolver.Architecture;
@@ -11,7 +12,7 @@ namespace LogSolver.Actions
         public string Name => "Aggregate";
         public int ActionCost { get; }
 
-        public AggregatedAction(IList<IAction<State>> actions )
+        public AggregatedAction(IList<IAction<State>> actions)
         {
             this.actions = actions;
             ActionCost = actions.Sum(a => a.ActionCost);
@@ -25,6 +26,11 @@ namespace LogSolver.Actions
             }
 
             return parentState;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}[{ActionCost}]: \r\n\t[{string.Join(Environment.NewLine + '\t', actions)}]";
         }
     }
 }

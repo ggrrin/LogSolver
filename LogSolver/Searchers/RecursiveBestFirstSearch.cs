@@ -50,7 +50,10 @@ namespace LogSolver.Searchers
                     }
                     else
                     {
-                        var bestSuccessor = currentLayer.Successors.PeekMin();
+                        var bestSuccessor = currentLayer.Successors.ExtractMin();
+                        var alternative = currentLayer.Successors.Any() ? currentLayer.Successors.PeekMin().GoalPriceEstimate : currentLayer.F_limit;
+                        currentLayer.Successors.Add(bestSuccessor); //push it back
+
                         if (bestSuccessor.GoalPriceEstimate > currentLayer.F_limit)
                         {
                             //Mark layer with best estimate from his successors
@@ -58,8 +61,6 @@ namespace LogSolver.Searchers
                         }
                         else
                         {
-                            var alternative = currentLayer.Successors.Any() ? currentLayer.Successors.PeekMin().GoalPriceEstimate : currentLayer.F_limit;
-
                             stack.Push(new StackFrame<TNode>
                             {
                                 Node = bestSuccessor,

@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LogSolver.Architecture;
 using LogSolver.Structures;
 
 namespace LogSolver.DummyObjects
 {
-    public struct City : IEquatable<City>
+    public struct City : IDummyObject<City>
     {
         private readonly State state;
         public uint Identifier { get; }
+
+        public Place Airport => Places.First(p => State.AirportsIdentifiers.Contains(p.Identifier));
 
         public City(uint identifier, State state)
         {

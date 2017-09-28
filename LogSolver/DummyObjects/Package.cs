@@ -1,10 +1,11 @@
 using System;
+using LogSolver.Architecture;
 using LogSolver.Helpers;
 using LogSolver.Structures;
 
 namespace LogSolver.DummyObjects
 {
-    public struct Package : IEquatable<Package>
+    public struct Package : IDummyObject<Package>
     {
         private readonly State state;
         public uint Identifier { get; }
@@ -14,7 +15,9 @@ namespace LogSolver.DummyObjects
 
         public Place Destination => new Place(State.PackagesDestinatioIdentifiers[(int)Identifier], state);
         public Place Location => new Place(state.PackagesLocationIdentifiers[(int)Identifier], state);
-        public bool IsInDestination => Destination == Location && LocationType == PackageLocationEnum.Store;//TODO opt 
+        public bool IsInDestination => Destination == Location;
+        public bool IsInDestinationCity => Destination.City == Location.City;
+        public bool IsInDestinationStore => Destination == Location && LocationType == PackageLocationEnum.Store;
 
         public Package(uint identifier, State state)
         {

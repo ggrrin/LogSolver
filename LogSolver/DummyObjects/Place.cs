@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using LogSolver.Architecture;
 using LogSolver.Structures;
 
 namespace LogSolver.DummyObjects
 {
-    public struct Place : IEquatable<Place>
+    public struct Place : IDummyObject<Place>
     {
         private readonly State state;
         public uint Identifier { get; }

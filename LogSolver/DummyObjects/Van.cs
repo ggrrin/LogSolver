@@ -1,26 +1,28 @@
-using System;
 using System.Collections.Generic;
+using LogSolver.Architecture;
 using LogSolver.Structures;
 
 namespace LogSolver.DummyObjects
 {
-    public struct Van : IEquatable<Van>
+    public struct Van : ITransportDummyObject<Van>
     {
         public uint Identifier { get; }
         private readonly State state;
 
         public HashSet<uint> Packages => state.VansLoads[(int)Identifier];
+        public Place Place => new Place(state.VansPlaceIdentifiers[(int)Identifier], state);
+
+        public int MaxLoad => 4;
+        public bool IsFull => Packages.Count >= MaxLoad;
+        public bool IsEmpty => Packages.Count == 0;
+        public bool IsPartlyLoaded => Packages.Count > 0 && Packages.Count < MaxLoad;
+        public int FreeStorageCount => MaxLoad - Packages.Count;
 
         public Van(uint identifier, State state)
         {
             this.Identifier = identifier;
             this.state = state;
         }
-
-        public const int maxVanLoad = 4;
-        public Place Place => new Place(state.VansPlaceIdentifiers[(int)Identifier], state);
-        public bool IsFull => Packages.Count >= maxVanLoad;
-        public int FreeStorageCount => maxVanLoad - Packages.Count; 
 
         public bool Equals(Van other) => Identifier == other.Identifier;
 

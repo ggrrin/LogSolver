@@ -1,13 +1,23 @@
 using System;
 using System.Collections.Generic;
+using LogSolver.Architecture;
 using LogSolver.Structures;
 
 namespace LogSolver.DummyObjects
 {
-    public struct Plane : IEquatable<Plane>
+    public struct Plane : ITransportDummyObject<Plane>
     {
         public uint Identifier { get; }
         private readonly State state;
+
+
+        public Place Place => new Place(state.PlanesLocationsIdentifiers[(int)Identifier], state);
+        public HashSet<uint> Packages => state.PlanesLoads[(int)Identifier];
+        public bool IsFull => Packages.Count >= MaxLoad;
+        public int FreeStorageCount => MaxLoad - Packages.Count;
+        public int MaxLoad => 30;
+        public bool IsEmpty => Packages.Count == 0;
+        public bool IsPartlyLoaded => Packages.Count > 0 && Packages.Count < MaxLoad;
 
         public Plane(uint identifier, State state)
         {
@@ -15,13 +25,7 @@ namespace LogSolver.DummyObjects
             this.state = state;
         }
 
-        public const int maxPlaneLoad = 30;
-        public Place Place => new Place(state.PlanesLocationsIdentifiers[(int)Identifier], state);
-        public HashSet<uint> Packages => state.PlanesLoads[(int)Identifier];
-        public bool IsFull => Packages.Count >= maxPlaneLoad;
-        public int FreeStorageCount => maxPlaneLoad - Packages.Count;
-
-        public bool Equals(Plane other) => Identifier == other.Identifier; 
+        public bool Equals(Plane other) => Identifier == other.Identifier;
 
         public override bool Equals(object obj)
         {

@@ -158,8 +158,8 @@ namespace LogSolver
             //var nodeFactory = new RBFSNodeFactory(new YPriceEstimator()); 
             //var nodeFactory = new RBFSNodeFactory(new SimpleRemainerPriceEstimator());
             //var nodeFactory = new RBFSNodeFactory(new PathRemaninerPriceEstimator());
-            var nodeFactory = new RBFSNodeFactory(new CombinePriceEstimator(new YPriceEstimator(), new PathRemaninerPriceEstimator()));
-            var expander = new DummyNodeExpander<RBFSNode<State>>(nodeFactory);
+            var nodeFactory = new RBFSNodeFactory(new CombinePriceEstimator(new CountPriceEstimator(), new PathRemaninerPriceEstimator()));
+            var expander = new YNodeExpander<RBFSNode<State>>(nodeFactory);
             var searcher = new RecursiveBestFirstSearch<RBFSNode<State>>(expander);
             var parser = new Parser(input);
 

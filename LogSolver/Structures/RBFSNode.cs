@@ -8,13 +8,15 @@ namespace LogSolver.Structures
     {
         public int GoalPriceEstimate { get; set; }
 
+        public int InitialGoalPriceEstimate { get; }
+
         public RBFSNode(Node<TState> parent, IAction<TState> action, IRemainerPriceEstimator<TState> estimator, int parentEstimate) : base(parent, action)
         {
-            GoalPriceEstimate = Math.Max(PathPrice + estimator.CalculateEstimate(State), parentEstimate);
+            InitialGoalPriceEstimate = GoalPriceEstimate = Math.Max(PathPrice + estimator.CalculateEstimate(State), parentEstimate);
         }
 
         public int CompareTo(RBFSNode<TState> other) => GoalPriceEstimate.CompareTo(other.GoalPriceEstimate);
 
-        public override string ToString(int fullPathPrice) => $"{PathPrice}/{fullPathPrice}({GoalPriceEstimate})|| {string.Join(" ", State.Packages.Select(p => $"[{p.Location.Identifier}|{p.Destination.Identifier}]"))} {Action}";
+        public override string ToString(int fullPathPrice) => $"{PathPrice}/{fullPathPrice}({InitialGoalPriceEstimate})|| Left:{State.Packages.Count(p => !p.IsInDestinationStore)}: {Action}";
     }
 }

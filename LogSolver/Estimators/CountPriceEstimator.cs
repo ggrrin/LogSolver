@@ -7,7 +7,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Estimators
 {
-    public class YPriceEstimator : IRemainerPriceEstimator<State>
+    public class CountPriceEstimator : IRemainerPriceEstimator<State>
     {
         public int CalculateEstimate(State state)
         {
@@ -39,6 +39,7 @@ namespace LogSolver.Estimators
                     placesWithoutPlanes++;
             }
 
+            //balicky ktere nejsou na letisti a nepatri do tohoto mesta
             return placesWithoutVans * 2 * new DriveAction(default(Van), default(Place)).ActionCost +
                    notUnloadedVansPackages * new UnLoadAction(default(Package)).ActionCost +
                    vansPackages * new UnLoadAction(default(Package)).ActionCost +

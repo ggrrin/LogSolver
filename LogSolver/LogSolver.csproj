@@ -90,9 +90,11 @@
     <Compile Include="Actions\BatchedPickUpAction.cs" />
     <Compile Include="Actions\BatchedUnLoadAction.cs" />
     <Compile Include="Architecture\IGoalEstimateNode.cs" />
+    <Compile Include="Architecture\IDummyObject.cs" />
+    <Compile Include="Architecture\ITransportDummyObject.cs" />
     <Compile Include="Estimators\CombinePriceEstimator.cs" />
-    <Compile Include="Estimators\YPriceEstimator.cs" />
-    <Compile Include="Expanders\YNodeExpander.cs" />
+    <Compile Include="Estimators\CountPriceEstimator.cs" />
+    <Compile Include="Expanders\BasicNodeExpander.cs" />
     <Compile Include="NodeFactories\RBFSNodeFactory.cs" />
     <Compile Include="Searchers\RecursiveBestFirstSearch.cs" />
     <Compile Include="Helpers\StackFrame.cs" />

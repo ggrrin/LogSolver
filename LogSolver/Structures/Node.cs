@@ -45,7 +45,7 @@ namespace LogSolver.Structures
 
         public bool IsGoalState()
         {
-            return State.Packages.All(p => p.IsInDestination);
+            return State.Packages.All(p => p.IsInDestinationStore);
         }
 
     }
