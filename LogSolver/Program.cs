@@ -34,28 +34,8 @@ namespace LogSolver
             //Informed astar tree search
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
-            //TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), RBFS);//winner
+            TestInputs(new FileInfo(@"..\..\..\..\inputs1\inputs.txt"), RBFS);//winner
 
-
-            //var pickUpBools = File.ReadAllLines(@"..\..\..\..\inputs\output-10.in.out")
-            //    //.Take(1887)
-            //    .Select(l => l.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-            //    .Where(ls => (ls[0] == "pickUp" || ls[0] == "dropOff") && ls[1] == "0")
-            //    .Select(ls => ls[0] == "pickUp");
-            //int load = 0;
-
-            //foreach (var p in pickUpBools)
-            //{
-            //    if (p)
-            //        load++;
-            //    else
-            //        load--;
-
-            //    if (load < 0 || load > 30)
-            //        throw new InvalidOperationException();
-            //}
-
-            //Console.WriteLine("OK");
 
             //////////
             //inputs//

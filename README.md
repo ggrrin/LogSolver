@@ -1,0 +1,120 @@
+LogSolver
+=========
+
+Model
+-----
+
+Problém jsem se rozhodl řešit prohledáváním stavového prostoru. Stav reprezentuje třída State. Položky stavu jsou pole číselných identifikátorů načtených ze vstupního souboru a hashmapy nákladů pro každý dopravní prostředek. Instance stavu obsahuje pouze položky, které se mouhou menit - neměnné položky jsou jako statické.
+
+Rozhodoval jsem se, zda do stavu ukladat přímo číselné identifikátory nebo jestli tyto pole převést na nějaké datové struktury. Výhodou prvního přístupu se mi zdála jasná velikost a struktura stavu. Druhý způsob ovšem sliboval jednoduší manipulaci a čtení informace ze stavu.
+
+Konečné řešení nakonec kombinuje oba zmíněné přístupy - vytvořil jsem model hybritdní. Ve stavu jsou tedy uložena pole identifikátorů, ale pro každý objekt v problému existuje dummy struktura zkrze kterou se jednoduse získávají informace o stavu. Tyto dummy struktury obsahuji pouze identifikátor a odkaz na stav a vytvařejí se při "zkoumání" stavu. 
+
+Bylo mi jasné, že budu muset vyzkoušet několik vyhledávacích alogritmů a tak jsem se snažil udělat objektový návrh, tak aby se jednoduše daly testovat různé řešiče problému.
+
+Architektura
+------------
+
+# Uzel stromu
+
+Samotný stav je vždy uložen v uzlu(prohledávaícho stromu). Každý vyhledávací algoritmus může mít uzel s trošku jinými položkami. Těchto různých implementací uzlu je možné docilít implementací rozhraní INode.
+
+Implementované uzly ve jemném prostoru Structures:
+
+- Node - základní implementace pro obyčejné neinformované searchery
+- AStarNode - implementace s položkou pro heuristky v informovaných searcherech A* nebo IDA*.
+- RBFSNode - implementace pro searcher RBFS
+
+# Expandéry
+
+Každému searcheru je nutné předat expandér uzlů - ten musí implementovat rozhrani INodeExpander. Expandér samotný potřebuje vytvářet uzly, ale už ho nezajíma jak se konkrétní uzel vytváři. Jelikož můžeme mít různe typy uzlů expandéru musíme vždy předa factory na tvorbu uzlů. Ke každému uzlu musí tak existovat jeho odpovídající factory. Expandér je tak odstíněn od samoté tvorby konkrétní uzlů a je se tak možné soustředit pouze na provedení samotné expanze.
+
+# Heuristiky
+
+Informovaným algoritmům je ještě zapotřebí nějakj předat heuristiky. Aby bylo opet možné vytvářet různé implementace heuristik existuje rozhrani IRemainerPriceEstimator. Konkrétní implementace heuristik se pak předají factories na uzly - která při vytváření uzlu provede přímo i jeho ohodnocení.
+
+# Akce
+
+Pro přechod mezi stavy se používají akce, ty je možné vytvořit implementací rozhrani IAction. Samotná akce pak provadí kopie a modifikace stavů. 
+
+
+Řešení problému
+---------------
+
+# Searchery
+
+Po implementaci stavu a akcí, zajištující přechod mezi stavy, jsem implementoval DummyExpander. Tento expandér expanduje uzel tak, že se snaží všechny dodávaky a všechny letadla poslat na všechna místa. Dále se pokusí naložit a vyložit všechny předměty do všech možných dopravnich prostředků.
+
+# Neinformované
+
+S tímto expandérem jsem se postupně pustil do implementace searcherů.  Začal jsem postupně s neinformovanými algoritmy BFS(BreathFirstSearch), DFS(DepthFirstSearch), IDS(IterativeDeepingSearch). Výsledky v prohledávání v tomto obsazení byly bídné už pro 1 město s 3 místy a 2 dodávakymi a trochu více předměty nebylo možné nalézt řešení. 
+
+# Informované
+
+Pokračoval jsem tedy dále s informovanými algoritmy. Nejprve klasický A* s prioritní frontou (AStarBreathFirstSearch). Výsledek byl o mnoho lepší nicméně stálé se dařilo řešit pouze problémy s několika jednotkami předmětů. Navíc v tomto případě došla velmi brzy pamět. 
+
+Pokračoval jsem implementací A* s iterativním prohlubováním (AstarIterativeDeepeningSearch). Výsledek byl o něco lepší a navíc tu nedocházel vůbec problém s pamětí.
+
+Jako poslední jsem provedl implmentaci RBFS (RecursiveBestFirstSearch), která se ukázala jako nejlepší.
+
+# Heuristiky
+
+Mírného zlepšení jsem ještě dosáhl implmentací lepších heuristik. Byl jsem schopen nalézt řešní s okolo 10-20ti předmětů. Podařilo se mi naimplmentovat v podstatě 2 heuristikz fungující relativně dobře. 
+
+## PathRemainerPriceEstimator 
+
+Heuristika, která pro každý balíček odhadne cenu tak jakoby balíček musel cestovat sám. Heuristika bohužel není přípustná, nicméně zlepšuje hodně efektivitu prohledávání.
+
+
+## CountPriceEstimator
+
+Tato heuristika napočítá počty růyných věcí:
+- počet balíčků, které je potřeba převést do jiného města
+- počet balíčků, které je třeba převést na jiné místa
+- počet míst, kde jsou balíčky, ale nejsou tam žádné dodávky
+- počet míst, kde jsou balíčky, ale nejsou tam žádná letadla
+- počty nevyložených balíčků z letadel a dodávek
+- počty balíčků v dodávkách a letadlech
+
+Tyto počty se pronásobí cenami příslušných akcí a všechny se sečtou.
+
+## CombinePriceEstimator
+
+Heuristika kombinující různé heuristky - v mém případě konkrétně dvě předchozí. Výsledek kombinuje tak, že vybočte minimum, průměr a sumu. Jako výsledek pak vráti průměr s náhodně přičeným číslem z rozdílu sumy a průměru a náhodně odečteným číslem z rozdílu průměru a minima. Tato heuristika po provedení expermintů dávala nejlepší řešení.
+
+# Expandéry
+
+Doposud byl vždy použit již zmiňovaný DummyNodeExpandér, který defacto zkouší všechny moznosti. V této sestavě tak byla stále nalézána řešení pouze pro 1 město a několik jednotek balíčků a míst. Rozhodl jsem se tedy naimplementovat chytrý expandér, který bý expandované uzly nějak ořezal.
+
+Tento expandér implementuje třída BasicNodeExpander a funguje přibližně následovně.
+- prázdné dodávky(letadla) zkouší poslat na všechna možná mista s nenaloženým nákladem
+- poloprázdné dodávky(letadla) zkouší posílat na všechna možná míst s nenaloženým nákladem a na všechné destinace předmětů v úložném prostoru.
+- plné dodávky(letadla) zkouší posílat na všechny možné destinace předmětů v úložném prostoru
+- pokud to jde snaží se naložit najednou co nejvštší možné mnžství balíčků do dodávek a letadel
+- snačí se vykáládat balíčky pouze v cílových destinacích nebo na letištích
+
+Toto je poslední imiplemnetované řešení přenášející následující výsledky.
+
+Výsledky
+--------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -49,11 +49,6 @@ namespace LogSolver.Estimators
                    airplanePackages * new DropOffAction().ActionCost +
                    citiesWithNotDeliverd * new FlyAction().ActionCost;
 
-            //fucing fast!!!
-            //return placesWithoutVans * 2 * new DriveAction(default(Van), default(Place)).ActionCost +
-            //       notUnloadedVansPackages * new UnLoadAction(default(Package)).ActionCost +
-            //       vansPackages * new UnLoadAction(default(Package)).ActionCost +
-            //       placesWithNotDeliverd * new DriveAction(default(Van), default(Place)).ActionCost;
 
         }
     }
