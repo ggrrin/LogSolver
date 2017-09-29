@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using LogSolver.DummyObjects;
+using LogSolver.Helpers;
 using LogSolver.Structures;
 
 namespace LogSolver.Actions
@@ -12,6 +13,8 @@ namespace LogSolver.Actions
 
         public BatchedPickUpAction(Plane plane, Package[] packages) : base("BatchedPickUp", 14 * packages.Length)
         {
+            if (plane.FreeStorageCount < packages.Length || packages.Any(package => package.LocationType != PackageLocationEnum.Store))
+                throw new ArgumentException();
             this.plane = plane;
             this.packages = packages;
         }

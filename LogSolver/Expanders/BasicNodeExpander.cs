@@ -152,9 +152,9 @@ namespace LogSolver.Expanders
 
                 if (packages.Any())
                     if (packages.Length == 1)
-                        loadActions.Add(new UnLoadAction(packages[0]));
+                        loadActions.Add(new UnLoadAction(packages[0], van));
                     else
-                        loadActions.Add(new BatchedUnLoadAction(packages));
+                        loadActions.Add(new BatchedUnLoadAction(packages, van));
             }
         }
 
@@ -167,9 +167,9 @@ namespace LogSolver.Expanders
                     .ToArray();
                 if (packages.Any())
                     if (packages.Length == 1)
-                        loadActions.Add(new DropOffAction(packages[0]));
+                        loadActions.Add(new DropOffAction(packages[0], plane));
                     else
-                        loadActions.Add(new BatchedDropOffAction(packages));
+                        loadActions.Add(new BatchedDropOffAction(packages, plane));
             }
         }
 

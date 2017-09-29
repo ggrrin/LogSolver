@@ -15,7 +15,7 @@ namespace LogSolver.Actions
             Name = name;
             ActionCost = actionCost;
             Id = IdCounter++;
-            if (Id == 346293266)
+            if (Id == 346293266 || Id == 359592869)
             {
                 
 

@@ -34,8 +34,28 @@ namespace LogSolver
             //Informed astar tree search
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
-            TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), RBFS);//winner
+            //TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), RBFS);//winner
 
+
+            //var pickUpBools = File.ReadAllLines(@"..\..\..\..\inputs\output-10.in.out")
+            //    //.Take(1887)
+            //    .Select(l => l.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            //    .Where(ls => (ls[0] == "pickUp" || ls[0] == "dropOff") && ls[1] == "0")
+            //    .Select(ls => ls[0] == "pickUp");
+            //int load = 0;
+
+            //foreach (var p in pickUpBools)
+            //{
+            //    if (p)
+            //        load++;
+            //    else
+            //        load--;
+
+            //    if (load < 0 || load > 30)
+            //        throw new InvalidOperationException();
+            //}
+
+            //Console.WriteLine("OK");
 
             //////////
             //inputs//
@@ -224,10 +244,10 @@ namespace LogSolver
             var nmove2x = nodeFactory.CreateNode(nmove2,
                 new DriveAction(nmove2.State.Vans.First(), nmove2.State.Places.ElementAt(0)));
 
-            var unload1 = nodeFactory.CreateNode(nmove1, new UnLoadAction(nmove1.State.Packages.ElementAt(0)));
+            var unload1 = nodeFactory.CreateNode(nmove1, new UnLoadAction(nmove1.State.Packages.ElementAt(0),nloaded.State.Vans.First() ));
 
 
-            var unload2 = nodeFactory.CreateNode(nmove2x, new UnLoadAction(nmove2x.State.Packages.ElementAt(0)));
+            var unload2 = nodeFactory.CreateNode(nmove2x, new UnLoadAction(nmove2x.State.Packages.ElementAt(0),nloaded.State.Vans.First()));
 
             int ninitHash = ninit.State.GetHashCode();
             int nmove1Hash = nmove1.State.GetHashCode();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LogSolver.Architecture;
 using LogSolver.Structures;
@@ -13,7 +14,17 @@ namespace LogSolver.DummyObjects
         public Place Place => new Place(state.VansPlaceIdentifiers[(int)Identifier], state);
 
         public int MaxLoad => 4;
-        public bool IsFull => Packages.Count >= MaxLoad;
+        public bool IsFull
+        {
+
+            get
+            {
+                if(Packages.Count > MaxLoad )
+                    throw new InvalidOperationException();
+                return Packages.Count == MaxLoad;
+            }
+        }
+
         public bool IsEmpty => Packages.Count == 0;
         public bool IsPartlyLoaded => Packages.Count > 0 && Packages.Count < MaxLoad;
         public int FreeStorageCount => MaxLoad - Packages.Count;

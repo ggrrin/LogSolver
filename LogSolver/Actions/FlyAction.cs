@@ -1,3 +1,4 @@
+using System;
 using LogSolver.DummyObjects;
 using LogSolver.Structures;
 
@@ -10,8 +11,16 @@ namespace LogSolver.Actions
 
         public FlyAction(City city, Plane plane) : base("Fly", 1000)
         {
+            if(plane.Place.City == city)
+                throw new ArgumentException();
             this.city = city;
             this.plane = plane;
+        }
+
+        public FlyAction() : base(String.Empty, 1000)
+        {
+            
+
         }
 
         public override State PerformAction(State parentState)

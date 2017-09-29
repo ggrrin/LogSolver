@@ -1,4 +1,6 @@
+using System;
 using LogSolver.DummyObjects;
+using LogSolver.Helpers;
 using LogSolver.Structures;
 
 namespace LogSolver.Actions
@@ -10,8 +12,16 @@ namespace LogSolver.Actions
 
         public PickUpAction(Plane plane, Package package) : base("PickUp", 14)
         {
+            if(plane.IsFull || package.LocationType != PackageLocationEnum.Store)
+                throw new ArgumentException();
             this.plane = plane;
             this.package = package;
+        }
+
+        public PickUpAction() : base(String.Empty, 14)
+        {
+            
+
         }
 
         public override State PerformAction(State parentState)

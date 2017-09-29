@@ -40,14 +40,14 @@ namespace LogSolver.Estimators
             }
 
             //balicky ktere nejsou na letisti a nepatri do tohoto mesta
-            return placesWithoutVans * 2 * new DriveAction(default(Van), default(Place)).ActionCost +
-                   notUnloadedVansPackages * new UnLoadAction(default(Package)).ActionCost +
-                   vansPackages * new UnLoadAction(default(Package)).ActionCost +
-                   placesWithNotDeliverd * new DriveAction(default(Van), default(Place)).ActionCost +
-                   placesWithoutPlanes * 2 * new FlyAction(default(City), default(Plane)).ActionCost +
-                   notUnloadedPlanesPackages * new DropOffAction(default(Package)).ActionCost +
-                   airplanePackages * new DropOffAction(default(Package)).ActionCost +
-                   citiesWithNotDeliverd * new FlyAction(default(City), default(Plane)).ActionCost;
+            return placesWithoutVans * 2 * new DriveAction().ActionCost +
+                   notUnloadedVansPackages * new UnLoadAction().ActionCost +
+                   vansPackages * new UnLoadAction().ActionCost +
+                   placesWithNotDeliverd * new DriveAction().ActionCost +
+                   placesWithoutPlanes * 2 * new FlyAction().ActionCost +
+                   notUnloadedPlanesPackages * new DropOffAction().ActionCost +
+                   airplanePackages * new DropOffAction().ActionCost +
+                   citiesWithNotDeliverd * new FlyAction().ActionCost;
 
             //fucing fast!!!
             //return placesWithoutVans * 2 * new DriveAction(default(Van), default(Place)).ActionCost +

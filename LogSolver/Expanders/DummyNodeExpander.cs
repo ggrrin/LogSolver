@@ -8,7 +8,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {
-    public class DummyNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State,TNode>
+    public class DummyNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State, TNode>
 
     {
         public INodeFactory<State, TNode> NodeFactory { get; }
@@ -39,11 +39,12 @@ namespace LogSolver.Expanders
                 switch (package.LocationType)
                 {
                     case PackageLocationEnum.Van:
-                        yield return NodeFactory.CreateNode(nodeToExpand, new UnLoadAction(package));
+                        yield return NodeFactory.CreateNode(nodeToExpand,
+                            new UnLoadAction(package, package.Location.Vans.First(v => v.Packages.Contains(package.Identifier))));
                         break;
 
                     case PackageLocationEnum.Plane:
-                        yield return NodeFactory.CreateNode(nodeToExpand, new DropOffAction(package));
+                        yield return NodeFactory.CreateNode(nodeToExpand, new DropOffAction(package, package.Location.Planes.First(v => v.Packages.Contains(package.Identifier))));
                         break;
 
                     case PackageLocationEnum.Store:

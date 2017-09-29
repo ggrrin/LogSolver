@@ -11,8 +11,17 @@ namespace LogSolver.Actions
 
         public DriveAction(Van van, Place newPlace) : base("Drive", 17)
         {
+            if(van.Place == newPlace)
+                throw new ArgumentException();
+
             this.van = van;
             this.newPlace = newPlace;
+        }
+
+        public DriveAction() : base(String.Empty, 17)
+        {
+            
+
         }
 
         public override State PerformAction(State parentState)

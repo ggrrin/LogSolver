@@ -13,7 +13,16 @@ namespace LogSolver.DummyObjects
 
         public Place Place => new Place(state.PlanesLocationsIdentifiers[(int)Identifier], state);
         public HashSet<uint> Packages => state.PlanesLoads[(int)Identifier];
-        public bool IsFull => Packages.Count >= MaxLoad;
+        public bool IsFull
+        {
+            get
+            {
+                if (Packages.Count > MaxLoad)
+                    throw new InvalidOperationException();
+                return Packages.Count == MaxLoad;
+            }
+        }
+
         public int FreeStorageCount => MaxLoad - Packages.Count;
         public int MaxLoad => 30;
         public bool IsEmpty => Packages.Count == 0;

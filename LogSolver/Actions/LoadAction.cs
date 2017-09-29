@@ -1,4 +1,6 @@
+using System;
 using LogSolver.DummyObjects;
+using LogSolver.Helpers;
 using LogSolver.Structures;
 
 namespace LogSolver.Actions
@@ -10,8 +12,17 @@ namespace LogSolver.Actions
 
         public LoadAction(Package package, Van van) : base("Load", 2)
         {
+            if(van.IsFull || package.LocationType != PackageLocationEnum.Store)
+                throw new ArgumentException();
+
             this.package = package;
             this.van = van;
+        }
+
+        public LoadAction() : base(String.Empty, 2)
+        {
+            
+
         }
 
         public override State PerformAction(State parentState)
