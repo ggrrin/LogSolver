@@ -15,7 +15,7 @@ Bylo mi jasné, že budu muset vyzkoušet několik vyhledávacích alogritmů a 
 Architektura
 ------------
 
-# Uzel stromu
+### Uzel stromu
 
 Samotný stav je vždy uložen v uzlu(prohledávaícho stromu). Každý vyhledávací algoritmus může mít uzel s trošku jinými položkami. Těchto různých implementací uzlu je možné docilít implementací rozhraní INode.
 
@@ -25,15 +25,15 @@ Implementované uzly ve jemném prostoru Structures:
 - AStarNode - implementace s položkou pro heuristky v informovaných searcherech A* nebo IDA*.
 - RBFSNode - implementace pro searcher RBFS
 
-# Expandéry
+### Expandéry
 
 Každému searcheru je nutné předat expandér uzlů - ten musí implementovat rozhrani INodeExpander. Expandér samotný potřebuje vytvářet uzly, ale už ho nezajíma jak se konkrétní uzel vytváři. Jelikož můžeme mít různe typy uzlů expandéru musíme vždy předa factory na tvorbu uzlů. Ke každému uzlu musí tak existovat jeho odpovídající factory. Expandér je tak odstíněn od samoté tvorby konkrétní uzlů a je se tak možné soustředit pouze na provedení samotné expanze.
 
-# Heuristiky
+### Heuristiky
 
 Informovaným algoritmům je ještě zapotřebí nějakj předat heuristiky. Aby bylo opet možné vytvářet různé implementace heuristik existuje rozhrani IRemainerPriceEstimator. Konkrétní implementace heuristik se pak předají factories na uzly - která při vytváření uzlu provede přímo i jeho ohodnocení.
 
-# Akce
+### Akce
 
 Pro přechod mezi stavy se používají akce, ty je možné vytvořit implementací rozhrani IAction. Samotná akce pak provadí kopie a modifikace stavů. 
 
@@ -41,15 +41,15 @@ Pro přechod mezi stavy se používají akce, ty je možné vytvořit implementa
 Řešení problému
 ---------------
 
-# Searchery
+### Searchery
 
 Po implementaci stavu a akcí, zajištující přechod mezi stavy, jsem implementoval DummyExpander. Tento expandér expanduje uzel tak, že se snaží všechny dodávaky a všechny letadla poslat na všechna místa. Dále se pokusí naložit a vyložit všechny předměty do všech možných dopravnich prostředků.
 
-# Neinformované
+### Neinformované
 
 S tímto expandérem jsem se postupně pustil do implementace searcherů.  Začal jsem postupně s neinformovanými algoritmy BFS(BreathFirstSearch), DFS(DepthFirstSearch), IDS(IterativeDeepingSearch). Výsledky v prohledávání v tomto obsazení byly bídné už pro 1 město s 3 místy a 2 dodávakymi a trochu více předměty nebylo možné nalézt řešení. 
 
-# Informované
+### Informované
 
 Pokračoval jsem tedy dále s informovanými algoritmy. Nejprve klasický A* s prioritní frontou (AStarBreathFirstSearch). Výsledek byl o mnoho lepší nicméně stálé se dařilo řešit pouze problémy s několika jednotkami předmětů. Navíc v tomto případě došla velmi brzy pamět. 
 
@@ -57,16 +57,16 @@ Pokračoval jsem implementací A* s iterativním prohlubováním (AstarIterative
 
 Jako poslední jsem provedl implmentaci RBFS (RecursiveBestFirstSearch), která se ukázala jako nejlepší.
 
-# Heuristiky
+### Heuristiky
 
 Mírného zlepšení jsem ještě dosáhl implmentací lepších heuristik. Byl jsem schopen nalézt řešní s okolo 10-20ti předmětů. Podařilo se mi naimplmentovat v podstatě 2 heuristikz fungující relativně dobře. 
 
-## PathRemainerPriceEstimator 
+###### PathRemainerPriceEstimator 
 
 Heuristika, která pro každý balíček odhadne cenu tak jakoby balíček musel cestovat sám. Heuristika bohužel není přípustná, nicméně zlepšuje hodně efektivitu prohledávání.
 
 
-## CountPriceEstimator
+###### CountPriceEstimator
 
 Tato heuristika napočítá počty růyných věcí:
 - počet balíčků, které je potřeba převést do jiného města
@@ -78,11 +78,11 @@ Tato heuristika napočítá počty růyných věcí:
 
 Tyto počty se pronásobí cenami příslušných akcí a všechny se sečtou.
 
-## CombinePriceEstimator
+###### CombinePriceEstimator
 
 Heuristika kombinující různé heuristky - v mém případě konkrétně dvě předchozí. Výsledek kombinuje tak, že vybočte minimum, průměr a sumu. Jako výsledek pak vráti průměr s náhodně přičeným číslem z rozdílu sumy a průměru a náhodně odečteným číslem z rozdílu průměru a minima. Tato heuristika po provedení expermintů dávala nejlepší řešení.
 
-# Expandéry
+### Expandéry
 
 Doposud byl vždy použit již zmiňovaný DummyNodeExpandér, který defacto zkouší všechny moznosti. V této sestavě tak byla stále nalézána řešení pouze pro 1 město a několik jednotek balíčků a míst. Rozhodl jsem se tedy naimplementovat chytrý expandér, který bý expandované uzly nějak ořezal.
 
@@ -100,13 +100,22 @@ Výsledky
 
 Následují výsledky testů pro pocet mest 1 až 8 a 2-6 násobek počet míst. Grafy zobrazují ceny, expandovane uzle, hloubku a realny cas.
 
-# Test 1
+
+### Závěrem 
+
+Je vidět, že výše popsaný solver si dokáže poradit i s netrivialními problémy. Na druhou stranu existuje spoustu míst na zdokonalení a tato verze je defacto výchozí. Rozhodně by stálo za to napsat lepší heuristiky - především nějakou přípustnou ale dostatečně dobrou aby hledala rychle řešení.
+
+V samotném expandéru je jiste mnoho míst ke z lepšení. Nejvíce mě ale láká myšlenka implementace expanderů jako neuronové sítě, která by se naučila expandovat správné akce pomocí evolučních algoritmů. Stejně tak by bylo zajimevé napsat takovou heuristiku.
+
+Co jsem ještě nezmiňoval je, že všechny vyhledávací algoritmy(až na RBFS) jsou implementované i s podporou tree searche. Nicméně v testech se ukázal overhead hashovaní stavů příliš velky.
+
+### Test 1
 ![x](./inputs/png/times_v1.png "times")
 ![x](./inputs/png/expand_v1.png "expand")
 ![x](./inputs/png/price_v1.png "price")
 ![x](./inputs/png/depth_v1.png "depth")
 
-# Test 2
+### Test 2
 ![x](./inputs/png/times_v2.png "times")
 ![x](./inputs/png/expand_v2.png "expand")
 ![x](./inputs/png/price_v2.png "price")
