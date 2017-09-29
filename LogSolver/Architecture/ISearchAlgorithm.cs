@@ -2,7 +2,7 @@
 
 namespace LogSolver.Architecture
 {
-    public interface ISearchAlgorithm<TState, TNode> where TState : class,IState where TNode : INode<TState>
+    public interface ISearchAlgorithm<TState, TNode> where TState : class,IState where TNode : INode<TState,TNode>
     {
         uint ExpandedNodesStat { get; }
         uint MaxDepthStat { get; }

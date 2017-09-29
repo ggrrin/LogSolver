@@ -34,7 +34,7 @@ namespace LogSolver
             //Informed astar tree search
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), ABFS);
             //TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), AIDS);
-            TestInputs(new FileInfo(@"..\..\..\..\simple-inputs\inputs.txt"), RBFS);//winner
+            TestInputs(new FileInfo(@"..\..\..\..\inputs\inputs.txt"), RBFS);//winner
 
 
             //////////
@@ -178,6 +178,10 @@ namespace LogSolver
                 Console.WriteLine($"==Searcher stats==");
                 Console.WriteLine($"ExpandedNodes: {searcher.ExpandedNodesStat}");
                 Console.WriteLine($"MaxDepth: {searcher.MaxDepthStat}");
+
+                var d = new ResultDumper<RBFSNode<State>>();
+                d.Dump(res, input + ".out");
+
                 break;
                 if (Console.ReadKey(false).Key == ConsoleKey.Enter)
                 {

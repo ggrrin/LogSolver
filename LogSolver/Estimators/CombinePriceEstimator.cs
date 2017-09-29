@@ -8,7 +8,7 @@ namespace LogSolver.Estimators
     public class CombinePriceEstimator : IRemainerPriceEstimator<State>
     {
         private readonly IRemainerPriceEstimator<State>[] estimators;
-        private static readonly Random rnd = new Random();
+        private static readonly Random rnd = new Random(3423);
 
         public CombinePriceEstimator(params IRemainerPriceEstimator<State>[] estimators)
         {

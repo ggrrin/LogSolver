@@ -7,7 +7,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {
-    public class SortedDummyNodeExpander<TNode> : DummyNodeExpander<TNode> where TNode : IGoalEstimateNode<State>
+    public class SortedDummyNodeExpander<TNode> : DummyNodeExpander<TNode> where TNode : IGoalEstimateNode<State,TNode>
     {
         public bool DescendingOrder { get; }
         public SortedDummyNodeExpander(INodeFactory<State, TNode> nodeFactory, bool descendingOrder) : base(nodeFactory)

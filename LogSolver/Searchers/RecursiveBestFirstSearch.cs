@@ -8,7 +8,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Searchers
 {
-    public class RecursiveBestFirstSearch<TNode> : ISearchAlgorithm<State, TNode> where TNode : RBFSNode<State>
+    public class RecursiveBestFirstSearch<TNode> : ISearchAlgorithm<State, TNode> where TNode : RBFSNode<State>, INode<State, TNode>
     {
         public uint ExpandedNodesStat { get; protected set; }
         public uint MaxDepthStat { get; protected set; }
@@ -33,6 +33,9 @@ namespace LogSolver.Searchers
             {
                 var currentLayer = stack.Peek();
 
+                MaxDepthStat = Math.Max(MaxDepthStat, currentLayer.Node.Depth);
+
+
                 if (currentLayer.Node.IsGoalState())
                 {
                     yield return currentLayer.Node;
@@ -40,6 +43,9 @@ namespace LogSolver.Searchers
                 }
                 else
                 {
+                    if (currentLayer.Successors == null)
+                        ExpandedNodesStat++;
+
                     //expand only if atanding for the first time
                     currentLayer.Successors = currentLayer.Successors ?? new Heap<TNode>(Expander.ExpandNode(currentLayer.Node));
 

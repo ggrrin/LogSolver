@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using LogSolver.DummyObjects;
 using LogSolver.Structures;
@@ -21,6 +22,10 @@ namespace LogSolver.Actions
         }
 
 
-        public override string ToString() => $"{base.ToString()} [{string.Join(", ",packages.Select(p => p.Identifier))}] to {van}";
+        public override string ToString() => $"{base.ToString()} [{string.Join(/*", "*/Environment.NewLine,packages.Select(p => p.Identifier))}] to {van}";
+        public override string Dump()
+        {
+            return string.Join(Environment.NewLine, packages.Select(p => $"load {van.Identifier} {p.Identifier}"));
+        }
     }
 }

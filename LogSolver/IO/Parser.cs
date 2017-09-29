@@ -1,7 +1,9 @@
+using System.Collections;
 using System.IO;
 using System.Linq;
 using LogSolver.Helpers;
 using LogSolver.Structures;
+using System.Net.NetworkInformation;
 
 namespace LogSolver.IO
 {

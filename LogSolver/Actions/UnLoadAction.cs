@@ -1,3 +1,4 @@
+using System.Linq;
 using LogSolver.DummyObjects;
 using LogSolver.Structures;
 
@@ -18,5 +19,9 @@ namespace LogSolver.Actions
         }
 
         public override string ToString() => $"{base.ToString()} {package}";
+        public override string Dump()
+        {
+            return $"unload {package.Location.Vans.First(p => p.Packages.Contains(package.Identifier)).Identifier} {package.Identifier}";
+        }
     }
 }

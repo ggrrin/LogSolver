@@ -8,7 +8,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {
-    public class DummyNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State>
+    public class DummyNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State,TNode>
 
     {
         public INodeFactory<State, TNode> NodeFactory { get; }

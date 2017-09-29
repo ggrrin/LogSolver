@@ -191,7 +191,7 @@ namespace LogSolver.Structures
             var xplanesLoads = planesLoads.ToArray();
 
             var plane = package.Location.Planes.First(v => v.Packages.Contains(package.Identifier));
-            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
+            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified plane 
             xplanesLoads[plane.Identifier].Remove(package.Identifier);
 
             return new State(vansPlaceIdentifiers, planesLocationsIdentifiers, packagesLocationIdentifiers, xpackagesLocationTypes, vansLoads, xplanesLoads);
@@ -207,7 +207,7 @@ namespace LogSolver.Structures
 
             var firstPackage = packages.First();
             var plane = firstPackage.Location.Planes.First(v => v.Packages.Contains(firstPackage.Identifier));
-            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified van
+            xplanesLoads[plane.Identifier] = new HashSet<uint>(xplanesLoads[plane.Identifier]); //clone only modified plane 
             foreach (var package in packages)
                 xplanesLoads[plane.Identifier].Remove(package.Identifier);
 

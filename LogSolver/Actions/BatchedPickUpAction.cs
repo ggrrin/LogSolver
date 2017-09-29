@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using LogSolver.DummyObjects;
 using LogSolver.Structures;
@@ -19,6 +20,10 @@ namespace LogSolver.Actions
         {
             return parentState.CloneChangingBatchedPickUpPackage(packages, plane);
         }
-        public override string ToString() => $"{base.ToString()} [{string.Join(", ", packages.Select(p => p.Identifier))}] to {plane}";
+        public override string ToString() => $"{base.ToString()} [{string.Join(/*", "*/Environment.NewLine, packages.Select(p => p.Identifier))}] to {plane}";
+        public override string Dump()
+        {
+            return string.Join(Environment.NewLine, packages.Select(p => $"pickUp {plane.Identifier} {p.Identifier}"));
+        }
     }
 }

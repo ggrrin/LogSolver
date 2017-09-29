@@ -6,7 +6,7 @@ using LogSolver.Helpers;
 
 namespace LogSolver.Searchers
 {
-    public class DepthFirstSearch<TState, TNode> : ISearchAlgorithm<TState, TNode> where TState : class, IState where TNode : INode<TState>
+    public class DepthFirstSearch<TState, TNode> : ISearchAlgorithm<TState, TNode> where TState : class, IState where TNode : INode<TState,TNode>
     {
         public uint ExpandedNodesStat { get; protected set; }
         public uint MaxDepthStat { get; protected set; }

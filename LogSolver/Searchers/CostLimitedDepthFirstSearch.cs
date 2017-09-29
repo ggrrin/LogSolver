@@ -7,7 +7,7 @@ namespace LogSolver.Searchers
 {
     public class CostLimitedDepthFirstSearch<TState, TNode> : DepthFirstSearch<TState, TNode>
         where TState : class, IState
-        where TNode : AStarNode<TState>
+        where TNode : AStarNode<TState>, INode<TState, TNode>
     {
         public int MaxCost { get; protected set; }
         public int MinCostOvercameLimit { get; protected set; }

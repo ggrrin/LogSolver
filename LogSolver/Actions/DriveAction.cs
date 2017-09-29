@@ -1,3 +1,4 @@
+using System;
 using LogSolver.DummyObjects;
 using LogSolver.Structures;
 
@@ -20,5 +21,9 @@ namespace LogSolver.Actions
         }
 
         public override string ToString() => $"{base.ToString()} {van} to {newPlace} with [{string.Join(" ,", van.Packages)}]";
+        public override string Dump()
+        {
+            return $"drive {van.Identifier} {newPlace.Identifier}";
+        }
     }
 }

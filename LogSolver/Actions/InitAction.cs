@@ -16,5 +16,10 @@ namespace LogSolver.Actions
         {
             return InputParser.Parse();
         }
+
+        public override string Dump()
+        {
+            return "";
+        }
     }
 }

@@ -19,5 +19,9 @@ namespace LogSolver.Actions
             return parentState.CloneChangingPickUpPackage(package, plane);
         }
         public override string ToString() => $"{base.ToString()} {package} to {plane}";
+        public override string Dump()
+        {
+            return $"pickUp {plane.Identifier} {package.Identifier}";
+        }
     }
 }

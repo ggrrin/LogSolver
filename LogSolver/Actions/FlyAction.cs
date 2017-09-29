@@ -20,5 +20,9 @@ namespace LogSolver.Actions
         }
 
         public override string ToString() => $"{base.ToString()} {plane} to {city} with [{string.Join(" ,", plane.Packages)}]";
+        public override string Dump()
+        {
+            return $"fly {plane.Identifier} {city.Airport.Identifier}";
+        }
     }
 }

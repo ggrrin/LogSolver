@@ -95,6 +95,7 @@
     <Compile Include="Estimators\CombinePriceEstimator.cs" />
     <Compile Include="Estimators\CountPriceEstimator.cs" />
     <Compile Include="Expanders\BasicNodeExpander.cs" />
+    <Compile Include="IO\ResultDumper.cs" />
     <Compile Include="NodeFactories\RBFSNodeFactory.cs" />
     <Compile Include="Searchers\RecursiveBestFirstSearch.cs" />
     <Compile Include="Helpers\StackFrame.cs" />

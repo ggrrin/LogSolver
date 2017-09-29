@@ -1,20 +1,29 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogSolver.Architecture;
 
 namespace LogSolver.Structures
 {
-    public class Node<TState> : INode<TState> where TState : class, IState
+    public class Node<TState> : Node<TState, Node<TState>> where TState : class, IState
+    {
+        public Node(Node<TState> parent, IAction<TState> action) : base(parent, action)
+        {
+        }
+    }
+
+    public class Node<TState, TNode> : INode<TState, TNode> where TState : class, IState where TNode : Node<TState, TNode>
     {
 
         public TState State { get; set; }
         public IAction<TState> Action { get; }
         public int PathPrice { get; }
         public uint Depth { get; }
+        public TNode Parent { get; }
 
-        public Node<TState> Parent { get; }
 
-        public Node(Node<TState> parent, IAction<TState> action)
+        public Node(TNode parent, IAction<TState> action)
         {
             Parent = parent;
             Action = action;
@@ -26,19 +35,26 @@ namespace LogSolver.Structures
         public string Dump()
         {
             var sb = new StringBuilder();
+            var stack = new Stack<Node<TState,TNode>>();
+
             var node = this;
             while (node != null)
             {
-                sb.AppendLine(node.ToString(PathPrice));
+                stack.Push(node);
                 node = node.Parent;
             }
+
+
+            foreach (var n in stack)
+                sb.AppendLine(n.ToString(PathPrice));
+
             return sb.ToString();
         }
 
         public virtual string ToString(int fullPathPrice)
         {
             return
-                $"{PathPrice}/{fullPathPrice}|| {string.Join(" ", State.Packages.Select(p => $"[{p.Location.Identifier}|{p.Destination.Identifier}]"))} {Action}";
+                $"Id[{Action.Id}]: {PathPrice}/{fullPathPrice}|| {string.Join(" ", State.Packages.Select(p => $"[{p.Location.Identifier}|{p.Destination.Identifier}]"))} {Action}";
         }
 
         public override string ToString() => ToString(0);

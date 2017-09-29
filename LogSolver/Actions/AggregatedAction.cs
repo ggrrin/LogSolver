@@ -6,19 +6,16 @@ using LogSolver.Structures;
 
 namespace LogSolver.Actions
 {
-    public class AggregatedAction : IAction<State>
+    public class AggregatedAction : ActionBase 
     {
         private readonly IList<IAction<State>> actions;
-        public string Name => "Aggregate";
-        public int ActionCost { get; }
 
-        public AggregatedAction(IList<IAction<State>> actions)
+        public AggregatedAction(IList<IAction<State>> actions) : base("Aggregate",actions.Sum(a => a.ActionCost))
         {
             this.actions = actions;
-            ActionCost = actions.Sum(a => a.ActionCost);
         }
 
-        public State PerformAction(State parentState)
+        public override State PerformAction(State parentState)
         {
             foreach (var action in actions)
             {
@@ -30,7 +27,9 @@ namespace LogSolver.Actions
 
         public override string ToString()
         {
-            return $"{Name}[{ActionCost}]: \r\n\t[{string.Join(Environment.NewLine + '\t', actions)}]";
+            return $"{Name}[{ActionCost}]: [{string.Join(Environment.NewLine + '\t', actions)}]";
         }
+
+        public override string Dump() => string.Join(Environment.NewLine, actions.Select(a => a.Dump()));
     }
 }

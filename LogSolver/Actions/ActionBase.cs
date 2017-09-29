@@ -5,6 +5,8 @@ namespace LogSolver.Actions
 {
     public abstract class ActionBase :IAction<State>
     {
+        private static uint IdCounter;
+        public uint Id { get; }
         public string Name { get; }
         public int ActionCost { get; }
 
@@ -12,10 +14,17 @@ namespace LogSolver.Actions
         {
             Name = name;
             ActionCost = actionCost;
+            Id = IdCounter++;
+            if (Id == 346293266)
+            {
+                
+
+            }
         }
 
         public abstract State PerformAction(State parentState);
 
         public override string ToString() => $"{Name}[{ActionCost}]:";
+        public abstract string Dump();
     }
 }

@@ -10,7 +10,7 @@ using LogSolver.Structures;
 
 namespace LogSolver.Expanders
 {
-    public class YNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State>
+    public class YNodeExpander<TNode> : INodeExpander<State, TNode> where TNode : INode<State,TNode>
     {
         public INodeFactory<State, TNode> NodeFactory { get; }
 
