@@ -98,7 +98,19 @@ Toto je poslední imiplemnetované řešení přenášející následující vý
 Výsledky
 --------
 
+Následují výsledky testů pro pocet mest 1 až 8 a 2-6 násobek počet míst. Grafy zobrazují ceny, expandovane uzle, hloubku a realny cas.
 
+# Test 1
+![x](./inputs/png/times_v1.png "times")
+![x](./inputs/png/expand_v1.png "expand")
+![x](./inputs/png/price_v1.png "price")
+![x](./inputs/png/depth_v1.png "depth")
+
+# Test 2
+![x](./inputs/png/times_v2.png "times")
+![x](./inputs/png/expand_v2.png "expand")
+![x](./inputs/png/price_v2.png "price")
+![x](./inputs/png/depth_v2.png "depth")
 
 
 
